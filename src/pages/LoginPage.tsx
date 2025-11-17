@@ -78,7 +78,7 @@ export default function LoginPage() {
 
                         if (!emailError && !passwordError) {
                             const user = await login(email, password);
-                            console.log(user);
+                            console.log(user?.uid);
                         }
 
                         setLoading(false);
