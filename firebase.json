@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "bnb-marathon-478216",
     "public": "dist",
     "ignore": [
       "firebase.json",
