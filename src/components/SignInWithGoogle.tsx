@@ -1,6 +1,6 @@
 import Typography from '@mui/material/Typography';
 import GoogleIcon from '@mui/icons-material/Google';
-import {GoogleAuthProvider, signInWithPopup} from "firebase/auth";
+import {browserCookiePersistence, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 import {logEvent} from "firebase/analytics";
 import {analytics, auth} from "../helper/firebase.ts";
 import type {Dispatch, SetStateAction} from "react";
@@ -17,6 +17,7 @@ export default function SignInWithGoogleButton({updateUserCallback}: Props) {
             const result = await signInWithPopup(auth, googleProvider);
             logEvent(analytics, "login", {method: "google", user_id: result.user.uid});
             updateUserCallback(result.user);
+            await auth.setPersistence(browserCookiePersistence);
         } catch (err) {
             console.error("Google login failed:", err);
             // show user-friendly error message
