@@ -1,18 +1,20 @@
-import Box from '@mui/material/Box';
-import LoginCard from "./components/LoginCard.tsx";
+import LoginPage from "./pages/LoginPage.tsx";
+import Container from '@mui/material/Container';
+import {BrowserRouter, Route, Routes} from "react-router";
 
 
 function App() {
 
     return (
-        <Box sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh',
-        }}>
-            <LoginCard/>
-        </Box>
+        <BrowserRouter>
+            <Container>
+                <Routes>
+                    <Route path="/" element={<LoginPage/>}/>
+                </Routes>
+            </Container>
+        </BrowserRouter>
+
+
     )
 }
 
