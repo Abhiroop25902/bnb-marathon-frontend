@@ -1,17 +1,18 @@
-import LoginPage from "./pages/LoginPage.tsx";
-import Container from '@mui/material/Container';
 import {BrowserRouter, Route, Routes} from "react-router";
+import HomePage from "./pages/HomePage.tsx";
+import Layout from "./Layout.tsx";
 
 
 function App() {
 
     return (
         <BrowserRouter>
-            <Container>
-                <Routes>
-                    <Route path="/login" element={<LoginPage/>}/>
-                </Routes>
-            </Container>
+            <Routes>
+                <Route path={'/'} element={<Layout/>}>
+                    <Route index element={<HomePage/>}/>
+                </Route>
+            </Routes>
+
         </BrowserRouter>
 
 
