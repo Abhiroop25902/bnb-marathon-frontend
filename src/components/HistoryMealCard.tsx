@@ -31,6 +31,7 @@ export default function HistoryMealCard({meal}: Props) {
                     </div>
                     <>
                         {meal.symptoms?.map(symptom => <Chip
+                            key={symptom}
                             sx={{
                                 backgroundColor: theme.palette.primary.main,
                                 color: theme.palette.primary.contrastText
@@ -49,7 +50,7 @@ export default function HistoryMealCard({meal}: Props) {
                     hour12: true,
                 })}</Typography>
                 <div style={{display: "flex", gap: "1rem"}}>
-                    {meal.detectedFoods.map(detectedFood => <Chip variant={"outlined"}
+                    {meal.detectedFoods.map(detectedFood => <Chip key={detectedFood} variant={"outlined"}
                                                                   label={toCapitalCase(detectedFood)}/>)}
                 </div>
             </div>
