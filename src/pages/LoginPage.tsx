@@ -16,13 +16,14 @@ import FeatherIcon from "feather-icons-react";
 
 export default function LoginPage() {
     const loggedInUser = globalState(s => s.loggedInUser)
+    const persistenceInitialized = globalState(s => s.persistenceInitialized)
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (loggedInUser) {
+        if (persistenceInitialized && loggedInUser) {
             navigate('/');
         }
-    }, [loggedInUser, navigate]);
+    }, [persistenceInitialized, loggedInUser, navigate]);
 
 
     logEvent(analytics, "page_view", {

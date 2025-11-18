@@ -4,8 +4,9 @@ import HistoryPage from "./pages/HistoryPage.tsx";
 import Layout from "./Layout.tsx";
 import {globalState} from "./helper/GlobalState.ts";
 import {auth} from "./helper/firebase.ts";
-import {onAuthStateChanged} from "firebase/auth";
+import {browserSessionPersistence, onAuthStateChanged} from "firebase/auth";
 import LoginPage from "./pages/LoginPage.tsx";
+import {useEffect} from "react";
 
 
 function App() {
@@ -22,6 +23,15 @@ function App() {
             console.log("User is signed out");
         }
     });
+
+    const setPersistenceInitialized = globalState(s => s.setPersistenceInitialized)
+    useEffect(() => {
+        auth.setPersistence(browserSessionPersistence).then(() => {
+            setPersistenceInitialized(true);
+            console.log('Persistence setup successfully')
+        });
+    }, [setPersistenceInitialized])
+
     return (
         <div style={{height: "100dvh", overflowY: "hidden"}}>
             <BrowserRouter>

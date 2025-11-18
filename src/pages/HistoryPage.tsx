@@ -12,13 +12,14 @@ import "./HistoryPage.css"
 
 export default function HistoryPage() {
     const loggedInUser = globalState(s => s.loggedInUser)
+    const persistenceInitialized = globalState(s => s.persistenceInitialized)
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!loggedInUser) {
+        if (persistenceInitialized && !loggedInUser) {
             navigate("/login");
         }
-    }, [loggedInUser, navigate]);
+    }, [persistenceInitialized, loggedInUser, navigate]);
 
     const url = "https://bnb-marathon-backend-569093928388.asia-east1.run.app";
 
@@ -71,7 +72,7 @@ export default function HistoryPage() {
                 }}>
                     {
                         mealLogs.map(
-                            (mealLog) => <HistoryMealCard meal={mealLog} key={mealLog.id}/>
+                            (mealLog) => <HistoryMealCard key={mealLog.id} meal={mealLog}/>
                         )
                     }
 
