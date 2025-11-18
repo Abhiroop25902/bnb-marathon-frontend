@@ -9,6 +9,6 @@ type StateType = {
 
 export const globalState = create<StateType>(set => ({
     loggedInUser: null,
-    setLoggedInUser: (newUser: StateType["loggedInUser"]) => set({loggedInUser: newUser})
+    setLoggedInUser: (newUser: StateType["loggedInUser"]) => set({loggedInUser: newUser}),
 }))
 

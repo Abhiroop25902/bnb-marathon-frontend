@@ -1,5 +1,6 @@
 import {BrowserRouter, Route, Routes} from "react-router";
 import HomePage from "./pages/HomePage.tsx";
+import HistoryPage from "./pages/HistoryPage.tsx";
 import Layout from "./Layout.tsx";
 import {globalState} from "./helper/GlobalState.ts";
 import {auth} from "./helper/firebase.ts";
@@ -22,16 +23,19 @@ function App() {
         }
     });
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path={'/'} element={<Layout/>}>
-                    <Route index element={<HomePage/>}/>
-                    <Route path={'/login'} element={<LoginPage/>}/>
-                </Route>
+        <div style={{height: "100dvh", overflowY: "hidden"}}>
+            <BrowserRouter>
+                <Routes>
+                    <Route path={'/'} element={<Layout/>}>
+                        <Route index element={<HomePage/>}/>
+                        <Route path={'/history'} element={<HistoryPage/>}/>
+                        <Route path={'/login'} element={<LoginPage/>}/>
+                    </Route>
 
-            </Routes>
+                </Routes>
 
-        </BrowserRouter>
+            </BrowserRouter>
+        </div>
 
 
     )
