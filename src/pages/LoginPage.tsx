@@ -1,6 +1,8 @@
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import InputAdornment from "@mui/material/InputAdornment";
+
 import Typography from '@mui/material/Typography';
 import {logEvent} from 'firebase/analytics'
 import {signInWithEmailAndPassword} from 'firebase/auth'
@@ -10,6 +12,7 @@ import {analytics, auth} from "../helper/firebase.ts";
 import {globalState} from "../helper/GlobalState.ts";
 import SignInWithGoogleButton from "../components/SignInWithGoogleButton.tsx";
 import {useNavigate} from "react-router";
+import FeatherIcon from "feather-icons-react";
 
 export default function LoginPage() {
     const loggedInUser = globalState(s => s.loggedInUser)
@@ -55,6 +58,7 @@ export default function LoginPage() {
 
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState(false);
+    const [passwordShow, setPasswordShow] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -75,11 +79,22 @@ export default function LoginPage() {
                        error={emailError}
             />
             <TextField id="outlined-basic password" label="Password" variant="outlined" margin="normal"
-                       type={"password"}
+                       type={passwordShow ? "text" : "password"}
                        required={true}
                        value={password}
                        onChange={(e) => setPassword(e.target.value)}
                        error={passwordError}
+                       slotProps={{
+                           input: {
+                               endAdornment: (
+                                   <InputAdornment position="end">
+                                       <FeatherIcon icon={passwordShow ? "eye-off" : "eye"}
+                                                    size={"1.5rem"}
+                                                    onClick={() => setPasswordShow(v => !v)}/>
+                                   </InputAdornment>
+                               )
+                           }
+                       }}
             />
 
             <Button variant="contained" sx={{marginTop: '0.5rem', height: '3rem'}} loading={loading}
