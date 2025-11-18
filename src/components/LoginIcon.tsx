@@ -1,25 +1,15 @@
-import {auth} from "../helper/firebase.ts";
-import NotLoggedInAvatar from "./NotLoggedInAvatar.tsx";
-import {useState} from "react";
-import Avatar from '@mui/material/Avatar';
+import {globalState} from "../helper/GlobalState.ts";
+import {Link} from "react-router";
+import LoggedInAvatar from "./LoggedInAvatar.tsx";
 
 
 export default function LoginIcon() {
-
-    const [user, setUser] = useState<typeof auth.currentUser>(auth.currentUser);
+    const user = globalState(state => state.loggedInUser)
 
     if (user === null) {
-        return <NotLoggedInAvatar updateUserCallback={setUser}/>
+        return <Link to="/login">Login</Link>
     }
 
-    if (user.photoURL === null) {
-        const displayString = user.displayName
-            ? user.displayName.split(' ').map(w => w.charAt(0).toUpperCase()).join('')
-            : user.email!.charAt(0).toUpperCase()
-
-        return <Avatar>{displayString}</Avatar>
-    }
-
-    return <Avatar alt={user.displayName as string} src={user.photoURL}/>
+    return <LoggedInAvatar/>
 
 }
