@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import {logEvent} from 'firebase/analytics'
 import {signInWithEmailAndPassword} from 'firebase/auth'
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {analytics, auth} from "../helper/firebase.ts";
 import {globalState} from "../helper/GlobalState.ts";
 import SignInWithGoogleButton from "../components/SignInWithGoogleButton.tsx";
@@ -18,9 +18,12 @@ export default function LoginPage() {
     const loggedInUser = globalState(s => s.loggedInUser)
     const navigate = useNavigate();
 
-    if (loggedInUser) {
-        navigate('/');
-    }
+    useEffect(() => {
+        if (loggedInUser) {
+            navigate('/');
+        }
+    }, [loggedInUser, navigate]);
+
 
     logEvent(analytics, "page_view", {
         page_title: 'Login',
