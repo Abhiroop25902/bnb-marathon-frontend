@@ -11,12 +11,10 @@ import FeatherIcon from "feather-icons-react";
 
 export default function LoggedInAvatar() {
     const theme = useTheme();
-
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
-    //@ts-expect-error adding any here make the html element typing resolution easier
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };

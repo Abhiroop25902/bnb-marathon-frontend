@@ -10,9 +10,14 @@ import LoginPage from "./pages/LoginPage.tsx";
 function App() {
     const loggedInUser = globalState(s => s.loggedInUser)
     const setLoggedInUser = globalState(state => state.setLoggedInUser)
+    async function callme() {
+      const token = await auth.currentUser?.getIdToken();
+      console.log(token);
+    }
     onAuthStateChanged(auth, (user) => {
         if (user) {
             setLoggedInUser(user);
+            callme();
             // User is signed in
             console.log("User is signed in:", user.uid);
         } else {
