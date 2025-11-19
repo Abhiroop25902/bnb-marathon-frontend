@@ -8,8 +8,10 @@ export default function Layout() {
         <Box
             sx={{
                 width: "100%",
+                height: "100dvh",
                 display: "flex",
                 flexDirection: "column",
+                overflowY: "hidden",
             }}
         >
             {/* TOP BAR ROW */}
@@ -32,7 +34,7 @@ export default function Layout() {
             </Box>
 
             {/* Page Content */}
-            <Box sx={{mt: 2}}>
+            <Box sx={{flexGrow: 1, display: "flex", overflowY: "hidden"}}>
                 <Outlet/>
             </Box>
         </Box>

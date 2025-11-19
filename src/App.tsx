@@ -1,14 +1,13 @@
-import {BrowserRouter, Navigate, Route, Routes} from "react-router";
 import {useEffect} from "react";
 import {auth} from "./helper/firebase";
 import {browserSessionPersistence, onAuthStateChanged} from "firebase/auth";
 import {globalState} from "./helper/GlobalState";
-
-import HomePage from "./pages/HomePage";
-import HistoryPage from "./pages/HistoryPage";
-import ProfilePage from "./pages/ProfilePage";
-import LoginPage from "./pages/LoginPage";
-import Layout from './Layout.tsx';
+import {BrowserRouter, Navigate, Route, Routes} from "react-router";
+import LoginPage from "./pages/LoginPage.tsx";
+import Layout from "./Layout.tsx";
+import HomePage from "./pages/HomePage.tsx";
+import HistoryPage from "./pages/HistoryPage.tsx";
+import ProfilePage from "./pages/ProfilePage.tsx";
 
 export default function App() {
     const loggedInUser = globalState((s) => s.loggedInUser);
