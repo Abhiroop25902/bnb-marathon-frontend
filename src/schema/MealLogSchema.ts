@@ -12,7 +12,7 @@ const MealLogSchema = z.object({
     imgUrl: z.string().optional(),
     rawText: z.string(),
     detectedFoods: z.array(z.string()),
-    symptoms: z.array(z.string()),
+    symptoms: z.array(z.string()).optional(),
 })
 
 export default MealLogSchema

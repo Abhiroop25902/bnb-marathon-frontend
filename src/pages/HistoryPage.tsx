@@ -1,4 +1,4 @@
-import {CircularProgress, Container, Typography} from '@mui/material';
+import {CircularProgress, Container, MenuItem, Select, Typography, useTheme} from '@mui/material';
 import {z} from "zod";
 import {useEffect, useState} from "react";
 import MealLogSchema from "../schema/MealLogSchema.ts";
@@ -7,6 +7,7 @@ import {globalState} from "../helper/GlobalState.ts";
 import {useNavigate} from "react-router";
 import "./HistoryPage.css"
 import HistoryMealCard from "../components/HistoryMealCard.tsx";
+import FeatherIcon from "feather-icons-react";
 
 
 export default function HistoryPage() {
@@ -23,9 +24,13 @@ export default function HistoryPage() {
     const url = "https://bnb-marathon-backend-569093928388.asia-east1.run.app";
 
     const [mealLogs, setMealLogs] = useState<Array<z.infer<typeof MealLogSchema>> | null>(null);
+    const [duration, setDuration] = useState<"lw" | "lm">("lw");
 
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMealLogs(null);
+
         async function fetchMealLogs() {
             const idToken = await loggedInUser!.getIdToken()
 
@@ -35,7 +40,7 @@ export default function HistoryPage() {
                         Authorization: `Bearer ${idToken}`,
                     },
                     params: {
-                        range: "lw",
+                        range: duration,
                     }
                 })
 
@@ -49,12 +54,34 @@ export default function HistoryPage() {
         }
 
         fetchMealLogs();
-    }, [loggedInUser]);
+    }, [loggedInUser, duration]);
 
+
+    const theme = useTheme();
 
     return (
         <Container sx={{height: "100%", overflowY: "hidden"}}>
-            <Typography variant={"h4"}>Meal History</Typography>
+            <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingTop: "1rem",
+                paddingBottom: "1rem"
+            }}>
+                <Typography variant={"h4"}>Meal History</Typography>
+                <div style={{display: "flex", alignItems: "center", gap: "0.5rem"}}>
+                    <FeatherIcon icon={"calendar"} color={theme.palette.primary.contrastText}/>
+                    <Select value={duration}
+                            onChange={(e) => {
+                                setDuration(e.target.value)
+                            }}
+                    >
+                        <MenuItem value={"lw"}>Last Week</MenuItem>
+                        <MenuItem value={"lm"}>Last Month</MenuItem>
+                    </Select>
+                </div>
+
+            </div>
             {
                 mealLogs === null ?
                     (<div style={{

@@ -43,6 +43,17 @@ const theme = createTheme({
                 },
             },
         },
+        MuiSelect: {
+            styleOverrides: {
+                root: {
+                    ".MuiSelect-outlined": {
+                        paddingTop: "0.5rem",
+                        paddingBottom: "0.5rem",
+                    }
+
+                }
+            }
+        },
         MuiChip: {
             styleOverrides: {
                 root: {
