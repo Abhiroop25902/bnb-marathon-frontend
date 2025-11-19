@@ -34,6 +34,15 @@ const theme = createTheme({
                 }
             }
         },
+        MuiTab: {
+            styleOverrides: {
+                root: {
+                    "&.Mui-selected": {
+                        color: '#675553',
+                    },
+                }
+            }
+        },
         MuiOutlinedInput: {
             styleOverrides: {
                 root: {
