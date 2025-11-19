@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import HistoryPage from "./pages/HistoryPage";
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
+import Layout from './Layout.tsx';
 
 export default function App() {
   const loggedInUser = globalState((s) => s.loggedInUser);
@@ -38,7 +39,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* LOGIN PAGE — public, but redirect if already logged in */}
+        {/* PUBLIC ROUTES */}
         <Route
           path="/login"
           element={
@@ -46,29 +47,14 @@ export default function App() {
           }
         />
 
-        {/* PROTECTED ROUTES */}
-        <Route
-          path="/"
-          element={
-            loggedInUser ? <HomePage /> : <Navigate to="/login" replace />
-          }
-        />
+        {/* PROTECTED ROUTES — wrapped inside Layout */}
+        <Route element={loggedInUser ? <Layout /> : <Navigate to="/login" replace />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Route>
 
-        <Route
-          path="/history"
-          element={
-            loggedInUser ? <HistoryPage /> : <Navigate to="/login" replace />
-          }
-        />
-
-        <Route
-          path="/profile"
-          element={
-            loggedInUser ? <ProfilePage /> : <Navigate to="/login" replace />
-          }
-        />
-
-        {/* Fallback */}
+        {/* FALLBACK */}
         <Route
           path="*"
           element={<Navigate to={loggedInUser ? "/" : "/login"} replace />}

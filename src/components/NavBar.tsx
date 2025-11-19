@@ -8,6 +8,7 @@ const NavBar = () => {
   const location = useLocation();
 
   const pathToTab: Record<string, string> = {
+    "/": "today",
     "/today": "today",
     "/history": "history",
     "/profile": "profile",
