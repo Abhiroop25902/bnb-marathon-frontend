@@ -15,6 +15,7 @@ export default function NavBar() {
         }}>
             <div id={"links"}>
                 <NavLink to={"/"}>Home</NavLink>
+                <NavLink to={"/history"}>History</NavLink>
             </div>
             <div id={"loginIcon"}>
                 <LoginIcon/>

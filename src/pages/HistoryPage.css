@@ -1,0 +1,19 @@
+.scrollArea {
+    /* Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+    scrollbar-width: thin;
+}
+
+/* Chrome / Safari / Edge */
+.scrollArea::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollArea::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollArea::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 4px;
+}
