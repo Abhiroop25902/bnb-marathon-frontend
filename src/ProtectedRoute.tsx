@@ -1,10 +1,10 @@
-import {Navigate, Outlet} from "react-router";
-import {auth} from "./helper/firebase";
+import { Navigate, Outlet } from "react-router-dom";
+import { auth } from "./helper/firebase";
 
 export default function ProtectedRoute() {
-    const user = auth.currentUser;
+  const user = auth.currentUser;
 
-    if (!user) return <Navigate to="/login" replace/>;
+  if (!user) return <Navigate to="/login" replace />;
 
-    return <Outlet/>;
+  return <Outlet />;
 }
