@@ -34,19 +34,18 @@ export default function LoggedInAvatar() {
             : user.email!.charAt(0).toUpperCase()
 
         displayAvatar = <Avatar sx={{
-            width: '3.5rem',
-            height: '3.5rem',
+            width: '3rem',
+            height: '3rem',
             backgroundColor: theme.palette.secondary.main,
-            fontSize: '1.5rem',
         }} onClick={handleClick}>{displayString}</Avatar>
     } else displayAvatar = <Avatar sx={{
-        width: '3.5rem',
-        height: '3.5rem',
+        width: '3rem',
+        height: '3rem',
         backgroundColor: theme.palette.secondary.main,
     }} onClick={handleClick} alt={user.displayName as string} src={user.photoURL}/>
 
     return (
-        <div style={{cursor: 'pointer'}}>
+        <>
             {displayAvatar}
             <Popover id={id}
                      open={open}
@@ -65,7 +64,7 @@ export default function LoggedInAvatar() {
                     </Typography>
                 </Box>
             </Popover>
-        </div>
+        </>
 
 
     )

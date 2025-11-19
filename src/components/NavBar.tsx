@@ -2,7 +2,6 @@ import {type SyntheticEvent, useEffect, useState} from "react";
 import {Box, Paper, Tab, Tabs, useTheme} from "@mui/material";
 import {useLocation, useNavigate} from "react-router";
 import LoginIcon from "./LoginIcon.tsx";
-import AddLogIcon from "./AddLogIcon.tsx";
 
 const pathToTab: Record<string, string> = {
     "/today": "today",
@@ -88,10 +87,8 @@ const NavBar = () => {
                         <Tab value="profile" label="Profile"/>
                     </Tabs>
                 </Paper>
-                <div style={{display: "flex", gap: "1rem"}}>
-                    <AddLogIcon/>
-                    <LoginIcon/>
-                </div>
+
+                <LoginIcon/>
             </Box>
         </Box>
     );
