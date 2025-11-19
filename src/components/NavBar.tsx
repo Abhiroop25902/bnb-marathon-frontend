@@ -79,6 +79,7 @@ const NavBar = () => {
                             },
                             "& .Mui-selected": {
                                 backgroundColor: theme.palette.primary.main + "55", // semi-transparent
+                                color: theme.palette.primary.contrastText,
                             },
                         }}
                     >
