@@ -1,4 +1,4 @@
-import {CircularProgress, Container, MenuItem, Select, Typography, useTheme} from '@mui/material';
+import {Chip, CircularProgress, Container, MenuItem, Select, Typography, useTheme} from '@mui/material';
 import {z} from "zod";
 import {useEffect, useState} from "react";
 import LogSchema from "../schema/LogSchema.ts";
@@ -8,7 +8,7 @@ import {useNavigate} from "react-router";
 import "./HistoryPage.css"
 import HistoryMealCard from "../components/HistoryMealCard.tsx";
 import FeatherIcon from "feather-icons-react";
-
+import {toCapitalCase} from "../helper/helper.ts";
 
 export default function HistoryPage() {
     const loggedInUser = globalState(s => s.loggedInUser)
@@ -23,13 +23,17 @@ export default function HistoryPage() {
 
     const url = "https://bnb-marathon-backend-569093928388.asia-east1.run.app";
 
-    const [mealLogs, setMealLogs] = useState<Array<z.infer<typeof LogSchema>> | null>(null);
+    const [logs, setLogs] = useState<Array<z.infer<typeof LogSchema>> | null>(null);
     const [duration, setDuration] = useState<"lw" | "lm">("lw");
 
+    const [selectedFilter, setSelectedFilter] = useState<z.infer<typeof LogSchema>['mealType'] | null>(null);
+
+    const [filteredLogs, setFilteredLogs] = useState<Array<z.infer<typeof LogSchema>> | null>(null);
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
-        setMealLogs(null);
+        setLogs(null);
+        setFilteredLogs(null);
 
         async function fetchMealLogs() {
             const idToken = await loggedInUser!.getIdToken()
@@ -47,7 +51,7 @@ export default function HistoryPage() {
                 const resultSchema = z.array(LogSchema)
 
                 const data: Array<z.infer<typeof LogSchema>> = resultSchema.parse(res.data)
-                setMealLogs(data)
+                setLogs(data)
             } catch (err) {
                 console.error(err)
             }
@@ -56,6 +60,15 @@ export default function HistoryPage() {
         fetchMealLogs();
     }, [loggedInUser, duration]);
 
+    useEffect(() => {
+        if (logs === null) return;
+        if (selectedFilter === null) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setFilteredLogs(logs);
+            return;
+        }
+        setFilteredLogs(logs.filter(e => e.mealType === selectedFilter));
+    }, [selectedFilter, logs]);
 
     const theme = useTheme();
 
@@ -82,8 +95,21 @@ export default function HistoryPage() {
                 </div>
 
             </div>
+            <div style={{paddingBottom: "1rem", display: "flex", gap: "0.5rem"}}>
+                {
+                    (["breakfast", "lunch", "dinner", "snacks"] as const).map(e =>
+                        <Chip key={e}
+                              variant={selectedFilter === e ? "filled" : "outlined"}
+                              label={toCapitalCase(e)}
+                              onClick={() => {
+                                  if (selectedFilter === e) setSelectedFilter(null)
+                                  else setSelectedFilter(e)
+                              }}
+                        />)
+                }
+            </div>
             {
-                mealLogs === null ?
+                filteredLogs === null ?
                     (<div style={{
                         width: '100%',
                         height: '100%',
@@ -106,7 +132,7 @@ export default function HistoryPage() {
                                 gap: "1rem"
                             }}>
                                 {
-                                    mealLogs.map(
+                                    filteredLogs.map(
                                         (mealLog) => <HistoryMealCard key={mealLog.id} meal={mealLog}/>
                                     )
                                 }
