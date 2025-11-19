@@ -1,7 +1,7 @@
 import {CircularProgress, Container, MenuItem, Select, Typography, useTheme} from '@mui/material';
 import {z} from "zod";
 import {useEffect, useState} from "react";
-import MealLogSchema from "../schema/MealLogSchema.ts";
+import LogSchema from "../schema/LogSchema.ts";
 import axios from "axios";
 import {globalState} from "../helper/GlobalState.ts";
 import {useNavigate} from "react-router";
@@ -23,7 +23,7 @@ export default function HistoryPage() {
 
     const url = "https://bnb-marathon-backend-569093928388.asia-east1.run.app";
 
-    const [mealLogs, setMealLogs] = useState<Array<z.infer<typeof MealLogSchema>> | null>(null);
+    const [mealLogs, setMealLogs] = useState<Array<z.infer<typeof LogSchema>> | null>(null);
     const [duration, setDuration] = useState<"lw" | "lm">("lw");
 
 
@@ -35,7 +35,7 @@ export default function HistoryPage() {
             const idToken = await loggedInUser!.getIdToken()
 
             try {
-                const res = await axios.get(`${url}/mealLog`, {
+                const res = await axios.get(`${url}/logs`, {
                     headers: {
                         Authorization: `Bearer ${idToken}`,
                     },
@@ -44,9 +44,9 @@ export default function HistoryPage() {
                     }
                 })
 
-                const resultSchema = z.array(MealLogSchema)
+                const resultSchema = z.array(LogSchema)
 
-                const data: Array<z.infer<typeof MealLogSchema>> = resultSchema.parse(res.data)
+                const data: Array<z.infer<typeof LogSchema>> = resultSchema.parse(res.data)
                 setMealLogs(data)
             } catch (err) {
                 console.error(err)

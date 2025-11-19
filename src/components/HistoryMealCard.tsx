@@ -1,12 +1,18 @@
 import {Card, Chip, Typography, useTheme} from "@mui/material";
-import FastfoodIcon from "@mui/icons-material/Fastfood";
 import {toCapitalCase} from "../helper/helper.ts";
 import {z} from "zod";
-import type MealLogSchema from "../schema/MealLogSchema.ts";
-
+import type LogSchema from "../schema/LogSchema.ts";
 
 type Props = {
-    meal: z.infer<typeof MealLogSchema>
+    meal: z.infer<typeof LogSchema>
+}
+
+const mealTypeEmojiMap: Record<Props['meal']['mealType'], string> = {
+    breakfast: "🥑",
+    lunch: "🥙",
+    snacks: "🍏",
+    dinner: "🥗",
+    other: "🍵"
 }
 
 export default function HistoryMealCard({meal}: Props) {
@@ -16,24 +22,18 @@ export default function HistoryMealCard({meal}: Props) {
     return (
         <Card style={{display: "flex", height: "10rem", padding: "1rem", flexDirection: "row", gap: "1rem"}}>
 
-            {meal.imgUrl ?
-                <img alt={meal.rawText} src={meal.imgUrl}
-                     style={{
-                         borderRadius: theme.shape.borderRadius,
-                         objectFit: "cover",
-                         objectPosition: "center",
-                         height: "100%",
-                         aspectRatio: "1/1",
-                     }}/> :
-                <div style={{
-                    height: "100%",
-                    aspectRatio: "1/1",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center"
-                }}>
-                    <FastfoodIcon fontSize={"large"}/>
-                </div>}
+
+            <div style={{
+                height: "100%",
+                aspectRatio: "1/1",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+            }}>
+                <div style={{fontSize: "4rem"}}>{
+                    mealTypeEmojiMap[meal.mealType]
+                }</div>
+            </div>
             <div style={{display: 'flex', flexDirection: "column", justifyContent: "start", width: "100%"}}>
                 <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                     <div style={{display: "flex", gap: "1rem", alignItems: "center"}}>
