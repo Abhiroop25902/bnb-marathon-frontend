@@ -1,6 +1,4 @@
-import {Container, Typography} from '@mui/material';
-
-import HistoryMealCard from "../components/HistoryMealCard.tsx";
+import {CircularProgress, Container, Typography} from '@mui/material';
 import {z} from "zod";
 import {useEffect, useState} from "react";
 import MealLogSchema from "../schema/MealLogSchema.ts";
@@ -8,6 +6,7 @@ import axios from "axios";
 import {globalState} from "../helper/GlobalState.ts";
 import {useNavigate} from "react-router";
 import "./HistoryPage.css"
+import HistoryMealCard from "../components/HistoryMealCard.tsx";
 
 
 export default function HistoryPage() {
@@ -53,31 +52,42 @@ export default function HistoryPage() {
     }, [loggedInUser]);
 
 
-    if (mealLogs === null) return (<div>Loading</div>);
-
     return (
         <Container sx={{height: "100%", overflowY: "hidden"}}>
             <Typography variant={"h4"}>Meal History</Typography>
+            {
+                mealLogs === null ?
+                    (<div style={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <CircularProgress/>
+                    </div>) :
+                    (<div
+                            className={"scrollArea"}
+                            style={{
+                                height: "100%",
+                                overflowY: "auto",
+                            }}>
 
-            <div
-                className={"scrollArea"}
-                style={{
-                    height: "100%",
-                    overflowY: "auto",
-                }}>
-                <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "1rem"
-                }}>
-                    {
-                        mealLogs.map(
-                            (mealLog) => <HistoryMealCard key={mealLog.id} meal={mealLog}/>
-                        )
-                    }
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "1rem"
+                            }}>
+                                {
+                                    mealLogs.map(
+                                        (mealLog) => <HistoryMealCard key={mealLog.id} meal={mealLog}/>
+                                    )
+                                }
 
-                </div>
-            </div>
+                            </div>
+                        </div>
+                    )
+            }
 
 
         </Container>
