@@ -16,11 +16,11 @@ const theme = createTheme({
         },
         background: {
             default: '#EEE9E2',
-            paper: '#FADCD9',
+            paper: '#F4EDE7',    // ivory
         }
     },
     shape: {
-        borderRadius: 16,
+        borderRadius: 8,
     },
     typography: {
         fontFamily:

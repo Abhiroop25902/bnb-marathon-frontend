@@ -1,6 +1,7 @@
-import { Box, Button, Chip, Typography, useTheme } from "@mui/material";
+import { Box, Button, Chip, Stack, Typography, useTheme } from "@mui/material";
 import FeatherIcon from "feather-icons-react";
 import HomeCard from "../components/HomeCard";
+import AIChat from "../components/AIChat";
 
 export default function HomePage() {
   const theme = useTheme();
@@ -9,34 +10,20 @@ export default function HomePage() {
   return (
     <Box
       sx={{
-        px: "4%",
-        py: 3,
+        px: 4,
+        py: 6,
+        backgroundColor: theme.palette.background.default,
         display: "flex",
         flexDirection: "column",
         gap: 4,
       }}
     >
-      {/* TOP ROW: Summary + Chip (left) and Log Meal (right) */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
-        }}
-      >
-        {/* LEFT SIDE */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Typography
-            variant="h6"
-            sx={{
-              color: theme.palette.text.secondary,
-              fontWeight: 600,
-            }}
-          >
+      {/* Top Row: Summary + Log Meal */}
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Stack spacing={1}>
+          <Typography variant="h5" sx={{ color: theme.palette.primary.contrastText }}>
             Your Meal Summary
           </Typography>
-
           <Chip
             label="Last 7 days"
             variant="outlined"
@@ -46,11 +33,11 @@ export default function HomePage() {
               px: 1.5,
               py: 0.5,
               fontSize: "0.85rem",
+              width: "fit-content",
             }}
           />
-        </Box>
+        </Stack>
 
-        {/* RIGHT SIDE (LOG MEAL BUTTON) */}
         <Button
           onClick={() => true}
           sx={{
@@ -58,32 +45,48 @@ export default function HomePage() {
             textTransform: "none",
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.primary.contrastText,
-            "&:hover": {
-              backgroundColor: theme.palette.primary.main + "cc",
-            },
+            "&:hover": { backgroundColor: theme.palette.primary.dark },
             px: 4,
             height: 34,
             fontWeight: 600,
             fontSize: "0.9rem",
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
           }}
         >
-          <FeatherIcon
-            icon="plus"
-            size={16}
-            color={theme.palette.primary.contrastText}
-          />
+          <FeatherIcon icon="plus" color={theme.palette.primary.contrastText} />
           Log Meal
         </Button>
       </Box>
 
-      {/* HOME CARDS */}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
-        {homeCardsData.map((item) => (
-          <HomeCard key={item} item={item} />
-        ))}
+      {/* Bottom Row: HomeCards + AIChat */}
+      <Box
+        sx={{
+          display: "flex",
+          gap: 4,
+          alignItems: "flex-start", // important!
+          minHeight: 500, // fixes ellipse
+        }}
+      >
+        {/* Left: HomeCards */}
+        <Box
+          sx={{
+            width: "40%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            maxHeight: "800px",          // 👈 SAME height as AIChat
+            overflowY: "auto",           // 👈 Scrollbar
+            pr: 1,                       // 👈 Little padding so scrollbar doesn't overlap cards
+          }}
+        >
+          {homeCardsData.map((item) => (
+            <HomeCard key={item} item={item} />
+          ))}
+        </Box>
+
+        {/* Right: AIChat */}
+        <Box sx={{ width: "60%", display: "flex" , minHeight: "500px", maxHeight: "800px" }}>
+          <AIChat />
+        </Box>
       </Box>
     </Box>
   );
