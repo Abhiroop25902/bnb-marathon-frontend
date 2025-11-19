@@ -9,7 +9,7 @@ import "./HistoryPage.css"
 import HistoryMealCard from "../components/HistoryMealCard.tsx";
 import FeatherIcon from "feather-icons-react";
 import {toCapitalCase} from "../helper/helper.ts";
-import NavBar from '../components/NavBar.tsx';
+import NavBar from "../components/NavBar.tsx";
 
 export default function HistoryPage() {
     const loggedInUser = globalState(s => s.loggedInUser)
@@ -74,78 +74,89 @@ export default function HistoryPage() {
     const theme = useTheme();
 
     return (
-        <Container sx={{height: "100%", overflowY: "hidden"}}>
-          <NavBar />
-            <div style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                paddingTop: "1rem",
-                paddingBottom: "1rem"
-            }}>
-                <Typography variant={"h4"}>Meal History</Typography>
-                <div style={{display: "flex", alignItems: "center", gap: "0.5rem"}}>
-                    <FeatherIcon icon={"calendar"} color={theme.palette.primary.contrastText}/>
-                    <Select value={duration}
-                            onChange={(e) => {
-                                setDuration(e.target.value)
-                            }}
-                    >
-                        <MenuItem value={"lw"}>Last Week</MenuItem>
-                        <MenuItem value={"lm"}>Last Month</MenuItem>
-                    </Select>
+        <div style={{height: "100dvh", display: "flex", flexDirection: "column"}}>
+            <NavBar/>
+            <Container sx={{flexGrow: '1', display: 'flex', flexDirection: 'column'}}>
+
+                <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingTop: "1rem",
+                    paddingBottom: "1rem"
+                }}>
+                    <Typography variant={"h4"}>Meal History</Typography>
+                    <div style={{display: "flex", alignItems: "center", gap: "0.5rem"}}>
+                        <FeatherIcon icon={"calendar"} color={theme.palette.primary.contrastText}/>
+                        <Select value={duration}
+                                onChange={(e) => {
+                                    setDuration(e.target.value)
+                                }}
+                        >
+                            <MenuItem value={"lw"}>Last Week</MenuItem>
+                            <MenuItem value={"lm"}>Last Month</MenuItem>
+                        </Select>
+                    </div>
                 </div>
-
-            </div>
-            <div style={{paddingBottom: "1rem", display: "flex", gap: "0.5rem"}}>
+                <div style={{paddingBottom: "1rem", display: "flex", gap: "0.5rem"}}>
+                    {
+                        (["breakfast", "lunch", "dinner", "snacks"] as const).map(e =>
+                            <Chip key={e}
+                                  variant={selectedFilter === e ? "filled" : "outlined"}
+                                  label={toCapitalCase(e)}
+                                  onClick={() => {
+                                      if (selectedFilter === e) setSelectedFilter(null)
+                                      else setSelectedFilter(e)
+                                  }}
+                            />)
+                    }
+                </div>
                 {
-                    (["breakfast", "lunch", "dinner", "snacks"] as const).map(e =>
-                        <Chip key={e}
-                              variant={selectedFilter === e ? "filled" : "outlined"}
-                              label={toCapitalCase(e)}
-                              onClick={() => {
-                                  if (selectedFilter === e) setSelectedFilter(null)
-                                  else setSelectedFilter(e)
-                              }}
-                        />)
-                }
-            </div>
-            {
-                filteredLogs === null ?
-                    (<div style={{
-                        width: '100%',
-                        height: '100%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}>
-                        <CircularProgress/>
-                    </div>) :
-                    (<div
-                            className={"scrollArea"}
-                            style={{
-                                height: "100%",
-                                overflowY: "auto",
-                            }}>
-
+                    filteredLogs === null ? (
                             <div style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "1rem"
+                                width: '100%',
+                                height: '100%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center'
                             }}>
-                                {
-                                    filteredLogs.map(
-                                        (mealLog) => <HistoryMealCard key={mealLog.id} meal={mealLog}/>
-                                    )
-                                }
-
+                                <CircularProgress/>
                             </div>
-                        </div>
-                    )
-            }
+                        ) :
+                        filteredLogs?.length === 0 ? (
+                            <div style={{
+                                width: '100%',
+                                height: '100%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                No Data found, please add some data
+                            </div>
+                        ) : (
+                            <div
+                                className={"scrollArea"}
+                                style={{
+                                    height: "100%",
+                                    overflowY: "auto",
+                                }}>
+
+                                <div style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: "1rem"
+                                }}>
+                                    {filteredLogs.map(
+                                        (mealLog) => <HistoryMealCard key={mealLog.id} meal={mealLog}/>
+                                    )}
+                                </div>
+                            </div>
+                        )
+                }
 
 
-        </Container>
+            </Container>
+        </div>
     )
 
 }

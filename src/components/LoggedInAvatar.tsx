@@ -34,9 +34,13 @@ export default function LoggedInAvatar() {
             : user.email!.charAt(0).toUpperCase()
 
         displayAvatar = <Avatar sx={{
+            width: '3rem',
+            height: '3rem',
             backgroundColor: theme.palette.secondary.main,
         }} onClick={handleClick}>{displayString}</Avatar>
     } else displayAvatar = <Avatar sx={{
+        width: '3rem',
+        height: '3rem',
         backgroundColor: theme.palette.secondary.main,
     }} onClick={handleClick} alt={user.displayName as string} src={user.photoURL}/>
 
@@ -53,9 +57,9 @@ export default function LoggedInAvatar() {
                      }}
             >
                 <Box onClick={() => auth.signOut()}
-                     sx={{display: 'flex', padding: '1rem', gap: '1rem', alignItems: 'center'}}>
-                    <FeatherIcon icon={"log-out"} size={"1.25rem"}/>
-                    <Typography variant="subtitle1" noWrap={true}>
+                     sx={{display: 'flex', padding: '1rem', gap: '0.5rem', alignItems: 'center'}}>
+                    <FeatherIcon icon={"log-out"} size={"1rem"}/>
+                    <Typography variant="subtitle2" noWrap={true}>
                         Log Out
                     </Typography>
                 </Box>
