@@ -54,6 +54,7 @@ const NavBar = () => {
                     elevation={1}
                     sx={{
                         px: 1,
+                        py: 0.5,
                         borderRadius: theme.shape.borderRadius,
                         backgroundColor: theme.palette.background.paper,
                         border: `1px solid ${theme.palette.primary.main}40`, // subtle border
