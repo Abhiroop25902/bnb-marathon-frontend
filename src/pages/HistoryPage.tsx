@@ -9,7 +9,6 @@ import "./HistoryPage.css"
 import HistoryMealCard from "../components/HistoryMealCard.tsx";
 import FeatherIcon from "feather-icons-react";
 import {toCapitalCase} from "../helper/helper.ts";
-import NavBar from '../components/NavBar.tsx';
 
 export default function HistoryPage() {
     const loggedInUser = globalState(s => s.loggedInUser)
@@ -74,15 +73,9 @@ export default function HistoryPage() {
     const theme = useTheme();
 
     return (
-        <Container sx={{height: "100%", overflowY: "hidden"}}>
-          <NavBar />
-            <div style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                paddingTop: "1rem",
-                paddingBottom: "1rem"
-            }}>
+        <Container sx={{flexGrow: 1, display: 'flex', flexDirection: 'column', overflowY: "hidden"}}>
+            <div
+                style={{display: "flex", justifyContent: "space-between", alignItems: "center", paddingBottom: "1rem"}}>
                 <Typography variant={"h4"}>Meal History</Typography>
                 <div style={{display: "flex", alignItems: "center", gap: "0.5rem"}}>
                     <FeatherIcon icon={"calendar"} color={theme.palette.primary.contrastText}/>
@@ -95,7 +88,6 @@ export default function HistoryPage() {
                         <MenuItem value={"lm"}>Last Month</MenuItem>
                     </Select>
                 </div>
-
             </div>
             <div style={{paddingBottom: "1rem", display: "flex", gap: "0.5rem"}}>
                 {
@@ -111,8 +103,8 @@ export default function HistoryPage() {
                 }
             </div>
             {
-                filteredLogs === null ?
-                    (<div style={{
+                filteredLogs === null ? (
+                    <div style={{
                         width: '100%',
                         height: '100%',
                         display: 'flex',
@@ -120,28 +112,39 @@ export default function HistoryPage() {
                         alignItems: 'center'
                     }}>
                         <CircularProgress/>
-                    </div>) :
-                    (<div
-                            className={"scrollArea"}
-                            style={{
-                                height: "100%",
-                                overflowY: "auto",
-                            }}>
+                    </div>
+                ) : filteredLogs.length === 0 ? (
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexGrow: 1
+                    }}>
+                        <Typography variant={"body2"}>No Data Found, Add Some?</Typography>
+                    </div>
+                ) : (
+                    <div
+                        className={"scrollArea"}
+                        style={{
+                            flexGrow: 1,
+                            overflowY: "auto",
+                        }}>
 
-                            <div style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "1rem"
-                            }}>
-                                {
-                                    filteredLogs.map(
-                                        (mealLog) => <HistoryMealCard key={mealLog.id} meal={mealLog}/>
-                                    )
-                                }
+                        <div style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "1rem"
+                        }}>
+                            {
+                                filteredLogs.map(
+                                    (mealLog) => <HistoryMealCard key={mealLog.id} meal={mealLog}/>
+                                )
+                            }
 
-                            </div>
                         </div>
-                    )
+                    </div>
+                )
             }
 
 

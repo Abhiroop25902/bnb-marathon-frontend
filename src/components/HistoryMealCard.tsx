@@ -20,7 +20,15 @@ export default function HistoryMealCard({meal}: Props) {
 
 
     return (
-        <Card style={{display: "flex", height: "10rem", padding: "1rem", flexDirection: "row", gap: "1rem"}}>
+        <Card style={{
+            display: "flex",
+            height: "10rem",
+            padding: "1rem",
+            flexDirection: "row",
+            gap: "1rem",
+            backgroundColor: theme.palette.primary.light + "22",
+            backdropFilter: "blur(4px)",
+        }}>
 
 
             <div style={{
