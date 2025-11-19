@@ -9,6 +9,7 @@ import "./HistoryPage.css"
 import HistoryMealCard from "../components/HistoryMealCard.tsx";
 import FeatherIcon from "feather-icons-react";
 import {toCapitalCase} from "../helper/helper.ts";
+import NavBar from '../components/NavBar.tsx';
 
 export default function HistoryPage() {
     const loggedInUser = globalState(s => s.loggedInUser)
@@ -74,6 +75,7 @@ export default function HistoryPage() {
 
     return (
         <Container sx={{height: "100%", overflowY: "hidden"}}>
+          <NavBar />
             <div style={{
                 display: "flex",
                 justifyContent: "space-between",

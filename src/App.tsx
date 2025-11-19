@@ -1,54 +1,80 @@
-import {BrowserRouter, Route, Routes} from "react-router";
-import HomePage from "./pages/HomePage.tsx";
-import HistoryPage from "./pages/HistoryPage.tsx";
-import Layout from "./Layout.tsx";
-import {globalState} from "./helper/GlobalState.ts";
-import {auth} from "./helper/firebase.ts";
-import {browserSessionPersistence, onAuthStateChanged} from "firebase/auth";
-import LoginPage from "./pages/LoginPage.tsx";
-import {useEffect} from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { auth } from "./helper/firebase";
+import { onAuthStateChanged, browserSessionPersistence } from "firebase/auth";
+import { globalState } from "./helper/GlobalState";
 
+import HomePage from "./pages/HomePage";
+import HistoryPage from "./pages/HistoryPage";
+import ProfilePage from "./pages/ProfilePage";
+import LoginPage from "./pages/LoginPage";
 
-function App() {
-    const loggedInUser = globalState(s => s.loggedInUser)
-    const setLoggedInUser = globalState(state => state.setLoggedInUser)
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            setLoggedInUser(user);
-            // User is signed in
-            console.log("User is signed in:", user.uid);
-        } else {
-            if (loggedInUser !== null) setLoggedInUser(null);
-            // User is signed out
-            console.log("User is signed out");
-        }
+export default function App() {
+  const loggedInUser = globalState((s) => s.loggedInUser);
+  const setLoggedInUser = globalState((s) => s.setLoggedInUser);
+  const persistenceInitialized = globalState((s) => s.persistenceInitialized);
+  const setPersistenceInitialized = globalState((s) => s.setPersistenceInitialized);
+
+  // 1) Setup Persistence — only once
+  useEffect(() => {
+    auth.setPersistence(browserSessionPersistence).finally(() => {
+      setPersistenceInitialized(true);
     });
+  }, [setPersistenceInitialized]);
 
-    const setPersistenceInitialized = globalState(s => s.setPersistenceInitialized)
-    useEffect(() => {
-        auth.setPersistence(browserSessionPersistence).then(() => {
-            setPersistenceInitialized(true);
-            console.log('Persistence setup successfully')
-        });
-    }, [setPersistenceInitialized])
+  // 2) Listen to Firebase login state — only once
+  useEffect(() => {
+    return onAuthStateChanged(auth, (user) => {
+      setLoggedInUser(user || null);
+    });
+  }, [setLoggedInUser]);
 
-    return (
-        <div style={{height: "100dvh", overflowY: "hidden"}}>
-            <BrowserRouter>
-                <Routes>
-                    <Route path={'/'} element={<Layout/>}>
-                        <Route index element={<HomePage/>}/>
-                        <Route path={'/history'} element={<HistoryPage/>}/>
-                        <Route path={'/login'} element={<LoginPage/>}/>
-                    </Route>
+  // Wait until Firebase finishes initializing
+  if (!persistenceInitialized) {
+    return <div>Loading...</div>;
+  }
 
-                </Routes>
+  return (
+    <BrowserRouter>
+      <Routes>
 
-            </BrowserRouter>
-        </div>
+        {/* LOGIN PAGE — public, but redirect if already logged in */}
+        <Route
+          path="/login"
+          element={
+            loggedInUser ? <Navigate to="/" replace /> : <LoginPage />
+          }
+        />
 
+        {/* PROTECTED ROUTES */}
+        <Route
+          path="/"
+          element={
+            loggedInUser ? <HomePage /> : <Navigate to="/login" replace />
+          }
+        />
 
-    )
+        <Route
+          path="/history"
+          element={
+            loggedInUser ? <HistoryPage /> : <Navigate to="/login" replace />
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            loggedInUser ? <ProfilePage /> : <Navigate to="/login" replace />
+          }
+        />
+
+        {/* Fallback */}
+        <Route
+          path="*"
+          element={<Navigate to={loggedInUser ? "/" : "/login"} replace />}
+        />
+
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
-export default App

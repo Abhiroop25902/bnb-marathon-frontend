@@ -19,9 +19,10 @@ export default function LoginPage() {
     const persistenceInitialized = globalState(s => s.persistenceInitialized)
     const navigate = useNavigate();
 
-    useEffect(() => {
+
+  useEffect(() => {
         if (persistenceInitialized && loggedInUser) {
-            navigate('/');
+            navigate('/', { replace: true });
         }
     }, [persistenceInitialized, loggedInUser, navigate]);
 
