@@ -1,8 +1,10 @@
-import { useState } from 'react';
-import { Box, Button, Card, Typography, useTheme } from '@mui/material';
+import {useState} from 'react';
+import {Box, Button, Card, Typography, useTheme} from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import RecommendationCard from './RecommendationCard.tsx';
-import { globalState } from '../helper/GlobalState.ts';
+import {globalState} from '../helper/GlobalState.ts';
+import axios from "axios";
+import {RecommendationListSchema} from "../schema/RecommendationSchema.ts";
 
 
 export default function AIRecommend() {
@@ -10,7 +12,7 @@ export default function AIRecommend() {
     const loggedInUser = globalState((s) => s.loggedInUser);
     const [loading, setLoading] = useState(false);
     const [recommendations, setRecommendations] = useState([]);
-    const backendUrl = 'https://bnb-marathon-backend-569093928388.asia-east1.run.app';
+    const backendUrl = 'https://localhost:8080';
 
     const handleGenerate = async () => {
         setLoading(true);
@@ -58,7 +60,7 @@ export default function AIRecommend() {
             }}
         >
             {/* Title */}
-            <Typography variant="h6" sx={{ color: theme.palette.primary.contrastText }}>
+            <Typography variant="h6" sx={{color: theme.palette.primary.contrastText}}>
                 AI Recommendations
             </Typography>
 
@@ -67,6 +69,7 @@ export default function AIRecommend() {
                 onClick={() => {
                     const response = handleGenerate();
                     response.then((recData) => {
+                        // @ts-expect-error sdfhgfds
                         setRecommendations(recData);
                     });
                 }}
@@ -76,7 +79,7 @@ export default function AIRecommend() {
                     textTransform: 'none',
                     backgroundColor: theme.palette.primary.main,
                     color: theme.palette.primary.contrastText,
-                    '&:hover': { backgroundColor: theme.palette.primary.dark },
+                    '&:hover': {backgroundColor: theme.palette.primary.dark},
                     alignSelf: 'center',
                     px: 4,
                     py: 1.5,
@@ -84,7 +87,7 @@ export default function AIRecommend() {
                     fontSize: '1rem'
                 }}
             >
-                <FeatherIcon icon="zap" size={18} style={{ marginRight: 8 }} />
+                <FeatherIcon icon="zap" size={18} style={{marginRight: 8}}/>
                 {loading ? 'Generating...' : 'Generate Recommendations'}
             </Button>
 
@@ -101,14 +104,14 @@ export default function AIRecommend() {
                 }}
             >
                 {recommendations.map((item) => (
-                    <RecommendationCard item={item} />
+                    <RecommendationCard item={item}/>
                 ))}
 
                 {/* Empty state */}
                 {!loading && recommendations.length === 0 && (
                     <Typography
                         variant="body2"
-                        sx={{ textAlign: 'center', color: theme.palette.primary.contrastText }}
+                        sx={{textAlign: 'center', color: theme.palette.primary.contrastText}}
                     >
                         Click the button above to get tailored recommendations.
                     </Typography>
