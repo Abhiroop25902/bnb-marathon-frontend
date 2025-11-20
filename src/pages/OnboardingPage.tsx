@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import {useState} from 'react';
+import {useNavigate} from 'react-router';
 import {
     Box,
     Button,
@@ -16,9 +16,9 @@ import {
     Typography,
     useTheme
 } from '@mui/material';
-import { globalState } from '../helper/GlobalState.ts';
+import {globalState} from '../helper/GlobalState.ts';
 import UserSchema from '../schema/UserSchema.ts';
-import { normalizeDateToYMD } from '../helper/helper.ts';
+import {normalizeDateToYMD} from '../helper/helper.ts';
 import axios from 'axios';
 
 export default function OnboardingPage() {
@@ -54,6 +54,8 @@ export default function OnboardingPage() {
     const handleDeleteSensitivity = (item: string) => {
         setSensitivities((prev) => prev.filter((s) => s !== item));
     };
+
+    const setUserInfo = globalState((s) => s.setUserInfo);
 
     const handleSubmit = async () => {
         try {
@@ -113,7 +115,7 @@ export default function OnboardingPage() {
                 }
             );
 
-            setUserInfo(...validData);
+            setUserInfo({...validData});
             navigate('/');
 
         } catch (err) {
@@ -134,21 +136,21 @@ export default function OnboardingPage() {
                             type="date"
                             value={lastPeriods[0]}
                             onChange={(e) => setLastPeriods([e.target.value, lastPeriods[1], lastPeriods[2]])}
-                            InputLabelProps={{ shrink: true }}
+                            InputLabelProps={{shrink: true}}
                         />
                         <TextField
                             label="Second Last Period"
                             type="date"
                             value={lastPeriods[1]}
                             onChange={(e) => setLastPeriods([lastPeriods[0], e.target.value, lastPeriods[2]])}
-                            InputLabelProps={{ shrink: true }}
+                            InputLabelProps={{shrink: true}}
                         />
                         <TextField
                             label="Third Last Period"
                             type="date"
                             value={lastPeriods[2]}
                             onChange={(e) => setLastPeriods([lastPeriods[0], lastPeriods[1], e.target.value])}
-                            InputLabelProps={{ shrink: true }}
+                            InputLabelProps={{shrink: true}}
                         />
                         <TextField
                             label="Average Cycle Length (days)"
@@ -168,7 +170,7 @@ export default function OnboardingPage() {
                                     onChange={(e) => setVegetarian(e.target.checked)}
                                     sx={{
                                         color: theme.palette.primary.main,
-                                        '&.Mui-checked': { color: theme.palette.primary.main }
+                                        '&.Mui-checked': {color: theme.palette.primary.main}
                                     }}
                                 />
                             }
@@ -198,7 +200,7 @@ export default function OnboardingPage() {
                                         handleAddSensitivity();
                                     }
                                 }}
-                                sx={{ mb: 1 }}
+                                sx={{mb: 1}}
                             />
                             <Stack direction="row" spacing={1} flexWrap="wrap">
                                 {sensitivities.map((s) => (
@@ -207,7 +209,7 @@ export default function OnboardingPage() {
                                         label={s}
                                         onDelete={() => handleDeleteSensitivity(s)}
                                         color="primary"
-                                        sx={{ mt: 0.5 }}
+                                        sx={{mt: 0.5}}
                                     />
                                 ))}
                             </Stack>
@@ -297,7 +299,7 @@ export default function OnboardingPage() {
                 {renderStepContent(activeStep)}
 
                 {/* BUTTONS */}
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+                <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 4}}>
                     <Button disabled={activeStep === 0} onClick={handleBack}>
                         Back
                     </Button>
@@ -309,7 +311,7 @@ export default function OnboardingPage() {
                             sx={{
                                 backgroundColor: theme.palette.primary.main,
                                 color: theme.palette.primary.contrastText,
-                                '&:hover': { backgroundColor: theme.palette.primary.dark }
+                                '&:hover': {backgroundColor: theme.palette.primary.dark}
                             }}
                         >
                             Next
@@ -321,7 +323,7 @@ export default function OnboardingPage() {
                             sx={{
                                 backgroundColor: theme.palette.primary.main,
                                 color: theme.palette.primary.contrastText,
-                                '&:hover': { backgroundColor: theme.palette.primary.dark }
+                                '&:hover': {backgroundColor: theme.palette.primary.dark}
                             }}
                         >
                             Complete

@@ -1,6 +1,6 @@
-import { Card, CardContent, Typography } from '@mui/material';
+import {Card, CardContent, Typography} from '@mui/material';
 
-export default function RecommendationCard({ item }) {
+export default function RecommendationCard({item}) {
     return (
         <Card
             elevation={0}
@@ -36,7 +36,7 @@ export default function RecommendationCard({ item }) {
                 {item.subtitle && (
                     <Typography
                         variant="body2"
-                        sx={{ color: 'text.secondary' }}
+                        sx={{color: 'text.secondary'}}
                     >
                         {item.subtitle}
                     </Typography>

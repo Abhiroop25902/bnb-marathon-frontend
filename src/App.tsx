@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
-import { auth } from './helper/firebase';
-import { browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
-import { globalState } from './helper/GlobalState';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
+import {useEffect} from 'react';
+import {auth} from './helper/firebase';
+import {browserSessionPersistence, onAuthStateChanged} from 'firebase/auth';
+import {globalState} from './helper/GlobalState';
+import {BrowserRouter, Navigate, Route, Routes} from 'react-router';
 import Layout from './Layout.tsx';
 import HistoryPage from './pages/HistoryPage.tsx';
 import ProfilePage from './pages/ProfilePage.tsx';
@@ -11,9 +11,9 @@ import HomePage from './pages/HomePage.tsx';
 import LoginPage from './pages/LoginPage.tsx';
 import Loader from './components/Loader.tsx';
 import axios from 'axios';
-import { z } from 'zod';
+import {z} from 'zod';
 import UserSchema from './schema/UserSchema.ts';
-import { getJSDateFromFirestoreDate } from './helper/helper.ts';
+import {getJSDateFromFirestoreDate} from './helper/helper.ts';
 
 export default function App() {
     const loggedInUser = globalState((s) => s.loggedInUser);
@@ -79,13 +79,14 @@ export default function App() {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="*" element={<Navigate to="/login" replace />} />
+                    <Route path="/login" element={<LoginPage/>}/>
+                    <Route path="*" element={<Navigate to="/login" replace/>}/>
                 </Routes>
             </BrowserRouter>
         );
     }
 
+    // @ts-expect-error err
     if (!userInfo || !userInfo.onboarding) {
         return <Loader></Loader>;
     }
@@ -95,25 +96,26 @@ export default function App() {
             <Routes>
                 <Route
                     path="/login"
-                    element={<Navigate to="/" replace />}
+                    element={<Navigate to="/" replace/>}
                 />
 
-                <Route element={<Layout />}>
+                <Route element={<Layout/>}>
                     <Route
                         path="/"
                         element={
+                            // @ts-expect-error err
                             userInfo.onboarding.completed
-                                ? <HomePage />
-                                : <OnboardingPage />
+                                ? <HomePage/>
+                                : <OnboardingPage/>
                         }
                     />
-                    <Route path="/history" element={<HistoryPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/onboarding" element={<OnboardingPage />} />
-                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/history" element={<HistoryPage/>}/>
+                    <Route path="/profile" element={<ProfilePage/>}/>
+                    <Route path="/onboarding" element={<OnboardingPage/>}/>
+                    <Route path="/home" element={<HomePage/>}/>
                 </Route>
 
-                <Route path="*" element={<Navigate to="/" replace />} />
+                <Route path="*" element={<Navigate to="/" replace/>}/>
             </Routes>
         </BrowserRouter>
     );

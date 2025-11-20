@@ -1,5 +1,5 @@
-import { create } from 'zustand/react';
-import { auth } from './firebase.ts';
+import {create} from 'zustand/react';
+import {auth} from './firebase.ts';
 
 
 type StateType = {
@@ -13,10 +13,10 @@ type StateType = {
 
 export const globalState = create<StateType>(set => ({
     loggedInUser: null,
-    setLoggedInUser: (newUser: StateType['loggedInUser']) => set({ loggedInUser: newUser }),
+    setLoggedInUser: (newUser: StateType['loggedInUser']) => set({loggedInUser: newUser}),
     persistenceInitialized: false,
-    setPersistenceInitialized: (newState: boolean) => set({ persistenceInitialized: newState }),
+    setPersistenceInitialized: (newState: boolean) => set({persistenceInitialized: newState}),
     userInfo: {},
-    setUserInfo: (userData: object) => set({ userInfo: userData })
+    setUserInfo: (userData: object) => set({userInfo: userData})
 }));
 

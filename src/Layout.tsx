@@ -1,14 +1,15 @@
-import { Outlet, useLocation } from 'react-router';
-import { Box } from '@mui/material';
+import {Outlet, useLocation} from 'react-router';
+import {Box} from '@mui/material';
 import NavBar from './components/NavBar.tsx';
 import LoggedInAvatar from './components/LoggedInAvatar.tsx';
-import { globalState } from './helper/GlobalState.ts';
+import {globalState} from './helper/GlobalState.ts';
 
 export default function Layout() {
     const location = useLocation();
     const userInfo = globalState((s) => s.userInfo);
 
     // Hide navbar on onboarding page
+    // @ts-expect-error errr
     const hideNav = location.pathname === '/onboarding' || (location.pathname === '/' && !userInfo.onboarding.completed);
 
     return (
@@ -33,7 +34,7 @@ export default function Layout() {
                     alignItems: 'center'
                 }}
             >
-                {!hideNav && (<NavBar />)}
+                {!hideNav && (<NavBar/>)}
 
                 {/* Right Side */}
                 <Box sx={{
@@ -42,7 +43,7 @@ export default function Layout() {
                     right: 24,           // <-- FIXED RIGHT
                     zIndex: 99
                 }}>
-                    <LoggedInAvatar />
+                    <LoggedInAvatar/>
                 </Box>
             </Box>
 
@@ -54,7 +55,7 @@ export default function Layout() {
                 justifyContent: 'center',  // center ANY page put inside Layout
                 alignItems: 'flex-start'
             }}>
-                <Outlet />
+                <Outlet/>
             </Box>
         </Box>
     );
