@@ -10,11 +10,11 @@ type Props = {
 }
 
 const mealTypeEmojiMap: Record<Props['meal']['mealType'], ReactElement> = {
-    breakfast: <CloudSun/>,
-    lunch: <Sun/>,
-    snacks: <CloudFog/>,
-    dinner: <Moon/>,
-    other: <Rainbow/>
+    breakfast: <CloudSun size={'3rem'}/>,
+    lunch: <Sun size={'3rem'}/>,
+    snacks: <CloudFog size={'3rem'}/>,
+    dinner: <Moon size={'3rem'}/>,
+    other: <Rainbow size={'3rem'}/>
 }
 
 export default function HistoryMealCard({meal}: Props) {
@@ -40,7 +40,7 @@ export default function HistoryMealCard({meal}: Props) {
                 alignItems: "center",
                 justifyContent: "center"
             }}>
-                <div style={{fontSize: "4rem"}}>{
+                <div>{
                     mealTypeEmojiMap[meal.mealType]
                 }</div>
             </div>
