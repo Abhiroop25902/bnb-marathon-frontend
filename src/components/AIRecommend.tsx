@@ -12,7 +12,7 @@ export default function AIRecommend() {
     const loggedInUser = globalState((s) => s.loggedInUser);
     const [loading, setLoading] = useState(false);
     const [recommendations, setRecommendations] = useState([]);
-    const backendUrl = 'https://localhost:8080';
+    const backendUrl = "https://bnb-marathon-backend-569093928388.asia-east1.run.app";
 
     const handleGenerate = async () => {
         setLoading(true);
