@@ -48,7 +48,7 @@ export default function HistoryMealCard({meal}: Props) {
                         <Typography variant={"h6"}>{toCapitalCase(meal.rawText)}</Typography>
                         <Chip label={toCapitalCase(meal.mealType)}/>
                     </div>
-                    <>
+                    <div style={{display: "flex", gap: "0.5rem"}}>
                         {meal.symptoms?.map(symptom => <Chip
                             key={symptom}
                             sx={{
@@ -56,7 +56,7 @@ export default function HistoryMealCard({meal}: Props) {
                                 color: theme.palette.primary.contrastText
                             }}
                             label={toCapitalCase(symptom)}/>)}
-                    </>
+                    </div>
 
                 </div>
                 <Typography variant={"body2"}
