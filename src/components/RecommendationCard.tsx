@@ -1,6 +1,6 @@
 import { Card, CardContent, Typography } from '@mui/material';
 
-export default function HomeCard({ item }) {
+export default function RecommendationCard({ item }) {
     return (
         <Card
             elevation={0}

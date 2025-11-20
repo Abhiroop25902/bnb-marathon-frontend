@@ -1,22 +1,46 @@
 import { useState } from 'react';
 import { Box, Button, Card, Typography, useTheme } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
-import HomeCard from './HomeCard'; // reuse existing card
+import RecommendationCard from './RecommendationCard.tsx';
+import { globalState } from '../helper/GlobalState.ts';
 
-export default function AIChat() {
+
+export default function AIRecommend() {
     const theme = useTheme();
-
+    const loggedInUser = globalState((s) => s.loggedInUser);
     const [loading, setLoading] = useState(false);
-    const [results, setResults] = useState<any[]>([]);
+    const [recommendations, setRecommendations] = useState([]);
+    const backendUrl = 'https://bnb-marathon-backend-569093928388.asia-east1.run.app';
 
     const handleGenerate = async () => {
         setLoading(true);
+        try {
+            if (!loggedInUser) {
+                console.error('User not logged in');
+                return;
+            }
+            const idToken = await loggedInUser.getIdToken();
+            const res = await axios.post(
+                `${backendUrl}/ai/recommendations/generate`,
+                {
+                    date: new Date().toISOString().slice(0, 10),
+                    count: 3
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${idToken}`
+                    }
+                }
+            );
+            console.log('Raw response:', res.data);
+            // Zod Parse
+            const parsed = RecommendationListSchema.parse(res.data.items);
+            console.log('Parsed recommendations:', parsed);
+            return parsed;
 
-        // Simulated API call — replace with your backend later
-        setTimeout(() => {
-            setResults([1, 2, 3]); // sample response
-            setLoading(false);
-        }, 1000);
+        } catch (err) {
+            console.error('Recommendation error:', err);
+        }
     };
 
     return (
@@ -40,7 +64,12 @@ export default function AIChat() {
 
             {/* Main Generate Button */}
             <Button
-                onClick={handleGenerate}
+                onClick={() => {
+                    const response = handleGenerate();
+                    response.then((recData) => {
+                        setRecommendations(recData);
+                    });
+                }}
                 disabled={loading}
                 sx={{
                     borderRadius: theme.shape.borderRadius,
@@ -71,12 +100,12 @@ export default function AIChat() {
                     maxHeight: 380
                 }}
             >
-                {results.map((item) => (
-                    <HomeCard key={item} item={item} />
+                {recommendations.map((item) => (
+                    <RecommendationCard item={item} />
                 ))}
 
                 {/* Empty state */}
-                {!loading && results.length === 0 && (
+                {!loading && recommendations.length === 0 && (
                     <Typography
                         variant="body2"
                         sx={{ textAlign: 'center', color: theme.palette.primary.contrastText }}
