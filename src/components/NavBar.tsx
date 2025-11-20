@@ -86,7 +86,7 @@ const NavBar = () => {
                     >
                         <Tab value="today" label="Today"/>
                         <Tab value="history" label="History"/>
-                        <Tab value="profile" label="Profile"/>
+                        {/*<Tab value="profile" label="Profile"/>*/}
                     </Tabs>
                 </Paper>
             </Box>
