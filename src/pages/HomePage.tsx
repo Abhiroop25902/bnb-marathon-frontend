@@ -1,11 +1,15 @@
-import {Box, Button, Chip, Stack, Typography, useTheme} from "@mui/material";
+import {Box, Button, Chip, Dialog, Stack, Typography, useTheme} from "@mui/material";
 import FeatherIcon from "feather-icons-react";
 import HomeCard from "../components/HomeCard";
 import AIChat from "../components/AIChat";
+import {useState} from "react";
+import NewMealLogModal from "../components/NewMealLogModal.tsx";
 
 export default function HomePage() {
     const theme = useTheme();
     const homeCardsData = [1, 2, 3];
+
+    const [modalOpen, setModalOpen] = useState(false);
 
     return (
         <Box
@@ -40,7 +44,7 @@ export default function HomePage() {
                 </Stack>
 
                 <Button
-                    onClick={() => true}
+                    onClick={() => setModalOpen(true)}
                     sx={{
                         borderRadius: "999px",
                         textTransform: "none",
@@ -56,6 +60,9 @@ export default function HomePage() {
                     <FeatherIcon icon="plus" color={theme.palette.primary.contrastText}/>
                     Log Meal
                 </Button>
+                <Dialog open={modalOpen} onClose={() => setModalOpen(false)}>
+                    <NewMealLogModal/>
+                </Dialog>
             </Box>
 
             {/* Bottom Row: HomeCards + AIChat */}
