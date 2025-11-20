@@ -91,7 +91,7 @@ export default function HistoryPage() {
             </div>
             <div style={{paddingBottom: "1rem", display: "flex", gap: "0.5rem"}}>
                 {
-                    (["breakfast", "lunch", "dinner", "snacks"] as const).map(e =>
+                    (["breakfast", "lunch", "dinner", "snacks", "other"] as const).map(e =>
                         <Chip key={e}
                               variant={selectedFilter === e ? "filled" : "outlined"}
                               label={toCapitalCase(e)}

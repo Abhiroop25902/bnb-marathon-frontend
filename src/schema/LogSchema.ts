@@ -9,14 +9,14 @@ const LogSchema = z.object({
     }),
     mealType: z.enum(["breakfast", "lunch", "snacks", "dinner", "other"]),
     rawText: z.string(),
-    detectedFoods: z.array(z.string()),
+    detectedFoods: z.array(z.string()).optional(),
     symptoms: z.array(z.string()).optional(),
-    processed: z.boolean(),
+    processed: z.boolean().optional(),
     estimatedMacros: z.object({
         carbs_g: z.number(),
         fat_g: z.number(),
         protein_g: z.number(),
-    }),
+    }).optional(),
 })
 
 export default LogSchema

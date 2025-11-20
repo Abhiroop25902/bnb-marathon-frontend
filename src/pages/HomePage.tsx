@@ -60,8 +60,8 @@ export default function HomePage() {
                     <FeatherIcon icon="plus" color={theme.palette.primary.contrastText}/>
                     Log Meal
                 </Button>
-                <Dialog open={modalOpen} onClose={() => setModalOpen(false)}>
-                    <NewMealLogModal/>
+                <Dialog fullWidth open={modalOpen} onClose={() => setModalOpen(false)}>
+                    <NewMealLogModal setModalOpen={setModalOpen}/>
                 </Dialog>
             </Box>
 

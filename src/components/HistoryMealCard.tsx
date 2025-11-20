@@ -69,8 +69,11 @@ export default function HistoryMealCard({meal}: Props) {
                     hour12: true,
                 })}</Typography>
                 <div style={{display: "flex", gap: "1rem"}}>
-                    {meal.detectedFoods.map(detectedFood => <Chip key={detectedFood} variant={"outlined"}
-                                                                  label={toCapitalCase(detectedFood)}/>)}
+                    {meal.estimatedMacros &&
+                        Object.entries(meal.estimatedMacros).map(([macro, amount]) => <Chip key={`${meal.id}-${macro}`}
+                                                                                            variant={"outlined"}
+                                                                                            label={toCapitalCase(`${macro.replace("_g", '')}: ${amount}g`)}/>)
+                    }
                 </div>
             </div>
         </Card>)
