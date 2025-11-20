@@ -2,17 +2,19 @@ import {Card, Chip, Typography, useTheme} from "@mui/material";
 import {toCapitalCase} from "../helper/helper.ts";
 import {z} from "zod";
 import type LogSchema from "../schema/LogSchema.ts";
+import {CloudFog, CloudSun, Moon, Rainbow, Sun} from "lucide-react";
+import type {ReactElement} from "react";
 
 type Props = {
     meal: z.infer<typeof LogSchema>
 }
 
-const mealTypeEmojiMap: Record<Props['meal']['mealType'], string> = {
-    breakfast: "🥑",
-    lunch: "🥙",
-    snacks: "🍏",
-    dinner: "🥗",
-    other: "🍵"
+const mealTypeEmojiMap: Record<Props['meal']['mealType'], ReactElement> = {
+    breakfast: <CloudSun/>,
+    lunch: <Sun/>,
+    snacks: <CloudFog/>,
+    dinner: <Moon/>,
+    other: <Rainbow/>
 }
 
 export default function HistoryMealCard({meal}: Props) {

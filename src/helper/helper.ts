@@ -3,7 +3,7 @@ export function toCapitalCase(s: string) {
 }
 
 export function getJSDateFromFirestoreDate(key: { _seconds: number, _nanoseconds: number }) {
-    return JSON.stringify(new Date(key._seconds * 1000 + key._nanoseconds / 1_000_000));
+    return new Date(key._seconds * 1000 + key._nanoseconds / 1_000_000).toISOString();
 }
 
 export function normalizeDateToYMD(val: string | Date | null | undefined) {

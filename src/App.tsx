@@ -12,8 +12,8 @@ import LoginPage from './pages/LoginPage.tsx';
 import Loader from './components/Loader.tsx';
 import axios from 'axios';
 import {z} from 'zod';
-import UserSchema from './schema/UserSchema.ts';
 import {getJSDateFromFirestoreDate} from './helper/helper.ts';
+import GetUserResponseSchema from "./schema/GetUserResponseSchema.ts";
 
 export default function App() {
     const loggedInUser = globalState((s) => s.loggedInUser);
@@ -38,8 +38,8 @@ export default function App() {
 
             res.data.onboarding.completedAt = getJSDateFromFirestoreDate(completedAt);
             res.data.cycle.lastPeriodStart = getJSDateFromFirestoreDate(lastPeriodStart);
-            const resultSchema = UserSchema;
-            const data: z.infer<typeof UserSchema> = resultSchema.parse(res.data);
+            const resultSchema = GetUserResponseSchema;
+            const data: z.infer<typeof GetUserResponseSchema> = resultSchema.parse(res.data);
             setUserInfo(data);
         } catch (err) {
             console.error(err);

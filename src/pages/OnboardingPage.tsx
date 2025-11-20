@@ -86,14 +86,15 @@ export default function OnboardingPage() {
                 },
                 onboarding: {
                     completed: true,
-                    completedAt: JSON.stringify(new Date()),
+                    completedAt: new Date().toISOString(),
                     version: 'v1'
                 },
                 preference: {
                     proteinTarget_g: proteinTarget,
                     sensitivities,
                     vegetarian
-                }
+                },
+                id: loggedInUser.uid
             };
 
             const result = UserSchema.safeParse(payload);
