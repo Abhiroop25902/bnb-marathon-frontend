@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { Box, Button, Card, Typography, useTheme } from '@mui/material';
+import {useState} from 'react';
+import {Box, Button, Card, Typography, useTheme} from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import RecommendationCard from './RecommendationCard.tsx';
-import { globalState } from '../helper/GlobalState.ts';
+import {globalState} from '../helper/GlobalState.ts';
 import axios from 'axios';
-import { type RecommendationItem, RecommendationListSchema } from '../schema/RecommendationSchema.ts';
-import { ScheduleItemSchema } from '../schema/ScheduledItemSchema.ts';
-import { z } from 'zod';
+import {type RecommendationItem, RecommendationListSchema} from '../schema/RecommendationSchema.ts';
+import {ScheduleItemSchema} from '../schema/ScheduledItemSchema.ts';
+import {z} from 'zod';
 
 
 export default function AIRecommend() {
@@ -45,7 +45,11 @@ export default function AIRecommend() {
             });
 
             // 2. DELETE → remove from recommendations
-            await axios.delete(`${backendUrl}/recommendation/${item.id}`);
+            await axios.delete(`${backendUrl}/recommendation/${item.id}`, {
+                headers: {
+                    Authorization: `Bearer ${idToken}`
+                }
+            });
 
             // 3. Update UI
             setRecommendations((prev) => prev.filter((r) => r.id !== item.id));
@@ -116,7 +120,7 @@ export default function AIRecommend() {
             }}
         >
             {/* Title */}
-            <Typography variant="h6" sx={{ color: theme.palette.primary.contrastText }}>
+            <Typography variant="h6" sx={{color: theme.palette.primary.contrastText}}>
                 AI Recommendations
             </Typography>
 
@@ -136,7 +140,7 @@ export default function AIRecommend() {
                     textTransform: 'none',
                     backgroundColor: theme.palette.primary.main,
                     color: theme.palette.primary.contrastText,
-                    '&:hover': { backgroundColor: theme.palette.primary.dark },
+                    '&:hover': {backgroundColor: theme.palette.primary.dark},
                     alignSelf: 'center',
                     px: 4,
                     py: 1.5,
@@ -144,7 +148,7 @@ export default function AIRecommend() {
                     fontSize: '1rem'
                 }}
             >
-                <FeatherIcon icon="zap" size={18} style={{ marginRight: 8 }} />
+                <FeatherIcon icon="zap" size={18} style={{marginRight: 8}}/>
                 {loading ? 'Generating...' : 'Generate Recommendations'}
             </Button>
 
@@ -162,7 +166,7 @@ export default function AIRecommend() {
                 }}
             >
                 {recommendations.map((item) => (
-                    <RecommendationCard key={item.id} item={item} onLock={handleLock} />
+                    <RecommendationCard key={item.id} item={item} onLock={handleLock}/>
                 ))}
 
                 {!loading && recommendations.length === 0 && (
