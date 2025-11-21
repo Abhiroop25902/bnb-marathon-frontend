@@ -226,7 +226,7 @@ export default function OnboardingPage() {
                         <Typography>Vegetarian: {vegetarian ? 'Yes' : 'No'}</Typography>
                         <Typography>Protein Target: {proteinTarget}g</Typography>
                         <Typography>
-                            Sensitivities: {sensitivities.length ? sensitivities.join(', ') : 'None'}
+                            Sensitivities: {inputChip || 'None'}
                         </Typography>
                     </Stack>
                 );
