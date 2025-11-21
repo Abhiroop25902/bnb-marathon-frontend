@@ -1,27 +1,77 @@
-import {useState} from 'react';
-import {Box, Button, Card, Typography, useTheme} from '@mui/material';
+import { useState } from 'react';
+import { Box, Button, Card, Typography, useTheme } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import RecommendationCard from './RecommendationCard.tsx';
-import {globalState} from '../helper/GlobalState.ts';
-import axios from "axios";
-import {RecommendationListSchema} from "../schema/RecommendationSchema.ts";
+import { globalState } from '../helper/GlobalState.ts';
+import axios from 'axios';
+import { type RecommendationItem, RecommendationListSchema } from '../schema/RecommendationSchema.ts';
+import { ScheduleItemSchema } from '../schema/ScheduledItemSchema.ts';
+import { z } from 'zod';
 
 
 export default function AIRecommend() {
     const theme = useTheme();
     const loggedInUser = globalState((s) => s.loggedInUser);
     const [loading, setLoading] = useState(false);
-    const [recommendations, setRecommendations] = useState([]);
-    const backendUrl = "https://bnb-marathon-backend-569093928388.asia-east1.run.app";
+    const [recommendations, setRecommendations] = useState<RecommendationItem[]>([]);
+    const backendUrl = 'https://bnb-marathon-backend-569093928388.asia-east1.run.app';
 
+    //-------------------------------------------------------------------
+    // LOCK HANDLER: Moves a recommendation → schedule & deletes original
+    //-------------------------------------------------------------------
+    const handleLock = async (item) => {
+        try {
+            const parsed = ScheduleItemSchema.parse({
+                id: item.id,
+                title: item.title,
+                description: item.description,
+                mealType: item.mealType,
+                protein_g: item.protein_g,
+                carbs_g: item.carbs_g,
+                fat_g: item.fat_g,
+                ingredients: item.ingredients ?? [],
+                source: 'ai',
+                createdAt: new Date().toISOString()
+            });
+
+            const idToken = await loggedInUser?.getIdToken();
+
+            // 1. POST → schedule list
+            await axios.post(`${backendUrl}/scheduled`, parsed, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${idToken}`
+                }
+            });
+
+            // 2. DELETE → remove from recommendations
+            await axios.delete(`${backendUrl}/recommendation/${item.id}`);
+
+            // 3. Update UI
+            setRecommendations((prev) => prev.filter((r) => r.id !== item.id));
+        } catch (err) {
+            if (err instanceof z.ZodError) {
+                console.error('ZOD ERROR:', err);
+                alert('Invalid data in recommendation');
+            } else {
+                console.error(err);
+                alert('Something went wrong. Please try again.');
+            }
+        }
+    };
+
+    //-------------------------------------------------------------------
+    // GENERATE HANDLER: Calls backend → generates recommendations
+    //-------------------------------------------------------------------
     const handleGenerate = async () => {
-        setLoading(true);
         try {
             if (!loggedInUser) {
                 console.error('User not logged in');
-                return;
+                return null;
             }
+
             const idToken = await loggedInUser.getIdToken();
+
             const res = await axios.post(
                 `${backendUrl}/ai/recommendations/generate`,
                 {
@@ -34,17 +84,23 @@ export default function AIRecommend() {
                     }
                 }
             );
+
             console.log('Raw response:', res.data);
-            // Zod Parse
+
+            // Parse with Zod
             const parsed = RecommendationListSchema.parse(res.data.items);
             console.log('Parsed recommendations:', parsed);
-            return parsed;
 
+            return parsed;
         } catch (err) {
             console.error('Recommendation error:', err);
+            return null;
         }
     };
 
+    //-------------------------------------------------------------------
+    // UI
+    //-------------------------------------------------------------------
     return (
         <Card
             sx={{
@@ -60,18 +116,19 @@ export default function AIRecommend() {
             }}
         >
             {/* Title */}
-            <Typography variant="h6" sx={{color: theme.palette.primary.contrastText}}>
+            <Typography variant="h6" sx={{ color: theme.palette.primary.contrastText }}>
                 AI Recommendations
             </Typography>
 
-            {/* Main Generate Button */}
+            {/* Generate Button */}
             <Button
-                onClick={() => {
-                    const response = handleGenerate();
-                    response.then((recData) => {
-                        // @ts-expect-error sdfhgfds
+                onClick={async () => {
+                    setLoading(true);
+                    const recData = await handleGenerate();
+                    if (recData) {
                         setRecommendations(recData);
-                    });
+                    }
+                    setLoading(false);
                 }}
                 disabled={loading}
                 sx={{
@@ -79,7 +136,7 @@ export default function AIRecommend() {
                     textTransform: 'none',
                     backgroundColor: theme.palette.primary.main,
                     color: theme.palette.primary.contrastText,
-                    '&:hover': {backgroundColor: theme.palette.primary.dark},
+                    '&:hover': { backgroundColor: theme.palette.primary.dark },
                     alignSelf: 'center',
                     px: 4,
                     py: 1.5,
@@ -87,7 +144,7 @@ export default function AIRecommend() {
                     fontSize: '1rem'
                 }}
             >
-                <FeatherIcon icon="zap" size={18} style={{marginRight: 8}}/>
+                <FeatherIcon icon="zap" size={18} style={{ marginRight: 8 }} />
                 {loading ? 'Generating...' : 'Generate Recommendations'}
             </Button>
 
@@ -100,18 +157,21 @@ export default function AIRecommend() {
                     mt: 2,
                     overflowY: 'auto',
                     pr: 1,
-                    maxHeight: 380
+                    maxHeight: 380,
+                    width: '100%'
                 }}
             >
                 {recommendations.map((item) => (
-                    <RecommendationCard item={item}/>
+                    <RecommendationCard key={item.id} item={item} onLock={handleLock} />
                 ))}
 
-                {/* Empty state */}
                 {!loading && recommendations.length === 0 && (
                     <Typography
                         variant="body2"
-                        sx={{textAlign: 'center', color: theme.palette.primary.contrastText}}
+                        sx={{
+                            textAlign: 'center',
+                            color: theme.palette.primary.contrastText
+                        }}
                     >
                         Click the button above to get tailored recommendations.
                     </Typography>
