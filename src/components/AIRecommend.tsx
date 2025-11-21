@@ -9,7 +9,12 @@ import {ScheduleItemSchema} from '../schema/ScheduledItemSchema.ts';
 import {z} from 'zod';
 
 
-export default function AIRecommend() {
+interface AIRecommendProps {
+    homeCardsData?: never[]
+    setHomeCardsData: (homeCardsData: never[]) => void
+}
+
+export default function AIRecommend({homeCardsData, setHomeCardsData}: AIRecommendProps) {
     const theme = useTheme();
     const loggedInUser = globalState((s) => s.loggedInUser);
     const [loading, setLoading] = useState(false);
@@ -53,6 +58,8 @@ export default function AIRecommend() {
 
             // 3. Update UI
             setRecommendations((prev) => prev.filter((r) => r.id !== item.id));
+            //@ts-expect-error err
+            setHomeCardsData([parsed, ...homeCardsData]);
         } catch (err) {
             if (err instanceof z.ZodError) {
                 console.error('ZOD ERROR:', err);

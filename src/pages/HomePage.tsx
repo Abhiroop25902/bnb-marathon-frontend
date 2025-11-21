@@ -1,10 +1,10 @@
-import { Box, Button, Dialog, Stack, Typography, useTheme } from '@mui/material';
+import {Box, Button, Dialog, Stack, Typography, useTheme} from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import HomeCard from '../components/HomeCard';
 import AIRecommend from '../components/AIRecommend.tsx';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import NewMealLogModal from '../components/NewMealLogModal.tsx';
-import { globalState } from '../helper/GlobalState.ts';
+import {globalState} from '../helper/GlobalState.ts';
 import axios from 'axios';
 
 export default function HomePage() {
@@ -60,9 +60,9 @@ export default function HomePage() {
             }}
         >
             {/* Top Row: Summary + Log Meal */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                 <Stack spacing={1}>
-                    <Typography variant="h5" sx={{ color: theme.palette.primary.contrastText }}>
+                    <Typography variant="h5" sx={{color: theme.palette.primary.contrastText}}>
                         Your Meal Summary
                     </Typography>
                 </Stack>
@@ -74,18 +74,18 @@ export default function HomePage() {
                         textTransform: 'none',
                         backgroundColor: theme.palette.primary.main,
                         color: theme.palette.primary.contrastText,
-                        '&:hover': { backgroundColor: theme.palette.primary.dark },
+                        '&:hover': {backgroundColor: theme.palette.primary.dark},
                         px: 4,
                         height: 34,
                         fontWeight: 600,
                         fontSize: '0.9rem'
                     }}
                 >
-                    <FeatherIcon icon="plus" color={theme.palette.primary.contrastText} />
+                    <FeatherIcon icon="plus" color={theme.palette.primary.contrastText}/>
                     Log Meal
                 </Button>
                 <Dialog fullWidth open={modalOpen} onClose={() => setModalOpen(false)}>
-                    <NewMealLogModal setModalOpen={setModalOpen} />
+                    <NewMealLogModal setModalOpen={setModalOpen}/>
                 </Dialog>
             </Box>
 
@@ -111,13 +111,13 @@ export default function HomePage() {
                     }}
                 >
                     {homeCardsData.map((item) => (
-                        <HomeCard key={item} item={item} />
+                        <HomeCard key={item} item={item}/>
                     ))}
                 </Box>
 
                 {/* Right: AIChat */}
-                <Box sx={{ width: '60%', display: 'flex', minHeight: '500px', maxHeight: '800px' }}>
-                    <AIRecommend />
+                <Box sx={{width: '60%', display: 'flex', minHeight: '500px', maxHeight: '800px'}}>
+                    <AIRecommend homeCardsData={homeCardsData} setHomeCardsData={setHomeCardsData}/>
                 </Box>
             </Box>
         </Box>
