@@ -1,15 +1,51 @@
-import { Box, Button, Chip, Dialog, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Button, Dialog, Stack, Typography, useTheme } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import HomeCard from '../components/HomeCard';
 import AIRecommend from '../components/AIRecommend.tsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NewMealLogModal from '../components/NewMealLogModal.tsx';
+import { globalState } from '../helper/GlobalState.ts';
+import axios from 'axios';
 
 export default function HomePage() {
     const theme = useTheme();
-    const homeCardsData = [1, 2, 3];
-
+    const [homeCardsData, setHomeCardsData] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
+    const loggedInUser = globalState((s) => s.loggedInUser);
+
+    useEffect(() => {
+        const fetchScheduled = async () => {
+            try {
+                if (!loggedInUser) return;
+
+                const idToken = await loggedInUser.getIdToken();
+                const backendUrl = 'https://bnb-marathon-backend-569093928388.asia-east1.run.app';
+
+                const res = await axios.get(
+                    `${backendUrl}/scheduled`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${idToken}`
+                        },
+                        params: {
+                            range: 'lw'
+                        }
+                    }
+                );
+
+                // Zod validation (expect an array)
+                const parsed = res.data.items;
+
+                // Save into HomeCards list
+                setHomeCardsData(parsed);
+
+            } catch (err) {
+                console.error('Error fetching scheduled meals:', err);
+            }
+        };
+
+        fetchScheduled();
+    }, [loggedInUser]);
 
     return (
         <Box
@@ -29,18 +65,6 @@ export default function HomePage() {
                     <Typography variant="h5" sx={{ color: theme.palette.primary.contrastText }}>
                         Your Meal Summary
                     </Typography>
-                    <Chip
-                        label="Last 7 days"
-                        variant="outlined"
-                        color="primary"
-                        sx={{
-                            borderRadius: '9999px',
-                            px: 1.5,
-                            py: 0.5,
-                            fontSize: '0.85rem',
-                            width: 'fit-content'
-                        }}
-                    />
                 </Stack>
 
                 <Button
@@ -61,7 +85,7 @@ export default function HomePage() {
                     Log Meal
                 </Button>
                 <Dialog fullWidth open={modalOpen} onClose={() => setModalOpen(false)}>
-                    <NewMealLogModal setModalOpen={setModalOpen}/>
+                    <NewMealLogModal setModalOpen={setModalOpen} />
                 </Dialog>
             </Box>
 
