@@ -34,27 +34,27 @@ export default function HomeCard({item}) {
                 </Typography>
 
                 {/* Subtitle */}
-                {item.subtitle && (
-                    <Typography
-                        variant="body2"
-                        sx={{color: 'text.secondary'}}
-                    >
-                        {item.subtitle}
-                    </Typography>
-                )}
+                {/*{item.subtitle && (*/}
+                {/*    <Typography*/}
+                {/*        variant="body2"*/}
+                {/*        sx={{color: 'text.secondary'}}*/}
+                {/*    >*/}
+                {/*        {item.subtitle}*/}
+                {/*    </Typography>*/}
+                {/*)}*/}
 
                 {/* Value */}
-                {item.value && (
-                    <Typography
-                        variant="h6"
-                        sx={(theme) => ({
-                            fontWeight: 700,
-                            color: theme.palette.primary.main
-                        })}
-                    >
-                        {item.value}
-                    </Typography>
-                )}
+                {/*{item.value && (*/}
+                {/*    <Typography*/}
+                {/*        variant="h6"*/}
+                {/*        sx={(theme) => ({*/}
+                {/*            fontWeight: 700,*/}
+                {/*            color: theme.palette.primary.main*/}
+                {/*        })}*/}
+                {/*    >*/}
+                {/*        {item.value}*/}
+                {/*    </Typography>*/}
+                {/*)}*/}
             </CardContent>
         </Card>
     );
