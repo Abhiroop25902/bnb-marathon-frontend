@@ -1,73 +1,128 @@
-# React + TypeScript + Vite
+PCOD Nourish – Frontend
+A modern React-based web application designed to support nutrition, meal logging, and AI-powered recommendations for users managing PCOD (Polycystic Ovarian Disorder).
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Link for Backend Repo: https://github.com/Abhiroop25902/bnb-marathon-backend 
 
-Currently, two official plugins are available:
+🚀 Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Frontend Framework: React (Vite + Bun)
+UI Library: Material-UI (MUI)
+State Management: Zustand
+Routing: React Router
+Auth & Storage: Firebase Web SDK (Email/Password Auth, Cloud Storage)
+API Client: Axios + Zod validation
+AI Integration: Uses backend Genkit → Gemini 2.5 Flash for recommendations
 
-## React Compiler
+📦 Features
+✔ Authentication
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Firebase Auth
 
-## Expanding the ESLint configuration
+Redirect to onboarding if first login
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+✔ Onboarding
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Cycle history
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Dietary preferences
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Sensitivities
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Saves via backend PATCH /user
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+✔ Home Dashboard
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Left: Scheduled meals from backend
+
+Right: AI meal recommendations
+
+Locking recommendations creates scheduled meals
+
+Generate Recommendations button integrated with backend
+
+✔ Log Meal
+
+Upload meal photo to Firebase Storage
+
+Submit meal details to backend via /scheduled
+
+✔ Theming
+
+Custom MUI theme
+
+Soft pastel palette for user-friendly experience
+
+Shared card layouts (HomeCard, RecommendationCard)
+
+📁 Project Structure (Summary)
+src/
+  components/
+    NavBar.tsx
+    HomeCard.tsx
+    RecommendationCard.tsx
+    AIRecommend.tsx
+    NewMealLogModal.tsx
+  pages/
+    HomePage.tsx
+    OnboardingPage.tsx
+    LoginPage.tsx
+    HistoryPage.tsx
+    ProfilePage.tsx
+  helper/
+    GlobalState.ts
+  schema/
+    RecommendationSchema.ts
+    ScheduledItemSchema.ts
+    UserPatchSchema.ts
+    LogSchema.ts
+  services/
+    firebase.ts
+  App.tsx
+  main.tsx
+
+🔧 Running the Project
+1. Install dependencies
+bun install
+
+
+or
+
+npm install
+
+2. Start development server
+bun dev
+
+
+or
+
+npm run dev
+
+3. Build
+bun run build
+
+🔐 Environment Variables
+
+Create a .env file:
+
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_PROJECT_ID=...
+VITE_FIREBASE_STORAGE_BUCKET=...
+VITE_FIREBASE_APP_ID=...
+
+VITE_BACKEND_URL=https://your-cloud-run-backend-url
+
+🌐 Backend
+
+This frontend communicates with the backend hosted on Google Cloud Run:
+
+AI Recommendations
+
+User Profile
+
+Scheduled Meals
+
+Logs
+
+Feedback
+
