@@ -14,6 +14,7 @@ import axios from 'axios';
 import {z} from 'zod';
 import {getJSDateFromFirestoreDate} from './helper/helper.ts';
 import GetUserResponseSchema from "./schema/GetUserResponseSchema.ts";
+import Constant from "./helper/Constant.ts";
 
 export default function App() {
     const loggedInUser = globalState((s) => s.loggedInUser);
@@ -22,29 +23,6 @@ export default function App() {
     const setPersistenceInitialized = globalState((s) => s.setPersistenceInitialized);
     const userInfo = globalState((s) => s.userInfo);
     const setUserInfo = globalState((s) => s.setUserInfo);
-
-    const url = 'https://bnb-marathon-backend-569093928388.asia-east1.run.app';
-
-    async function fetchUserDetails() {
-        const idToken = await loggedInUser!.getIdToken();
-        try {
-            const res = await axios.get(`${url}/user/me`, {
-                headers: {
-                    Authorization: `Bearer ${idToken}`
-                }
-            });
-            const completedAt = res.data.onboarding.completedAt;
-            const lastPeriodStart = res.data.cycle.lastPeriodStart;
-
-            res.data.onboarding.completedAt = getJSDateFromFirestoreDate(completedAt);
-            res.data.cycle.lastPeriodStart = getJSDateFromFirestoreDate(lastPeriodStart);
-            const resultSchema = GetUserResponseSchema;
-            const data: z.infer<typeof GetUserResponseSchema> = resultSchema.parse(res.data);
-            setUserInfo(data);
-        } catch (err) {
-            console.error(err);
-        }
-    }
 
     // 1) Setup Persistence — only once
     useEffect(() => {
@@ -62,14 +40,37 @@ export default function App() {
     }, [setLoggedInUser]);
 
     useEffect(() => {
+        async function fetchUserDetails() {
+            const idToken = await loggedInUser!.getIdToken();
+            try {
+                const res = await axios.get(`${Constant.backendUrl}/user/me`, {
+                    headers: {
+                        Authorization: `Bearer ${idToken}`
+                    }
+                });
+                const completedAt = res.data.onboarding.completedAt;
+                const lastPeriodStart = res.data.cycle.lastPeriodStart;
+
+                res.data.onboarding.completedAt = getJSDateFromFirestoreDate(completedAt);
+                res.data.cycle.lastPeriodStart = getJSDateFromFirestoreDate(lastPeriodStart);
+                const resultSchema = GetUserResponseSchema;
+                const data: z.infer<typeof GetUserResponseSchema> = resultSchema.parse(res.data);
+                setUserInfo(data);
+            } catch (err) {
+                // this can happen when new user signs up
+                console.error(err);
+                setUserInfo({
+                    onboarding: {
+                        completed: false
+                    }
+                });
+            }
+        }
+
         if (loggedInUser) {
             fetchUserDetails();
         }
-    }, [loggedInUser]);
-
-    useEffect(() => {
-        console.log('userInfo updated:', userInfo);
-    }, [userInfo]);
+    }, [loggedInUser, setUserInfo]);
 
     if (!persistenceInitialized) {
         return <Loader></Loader>;

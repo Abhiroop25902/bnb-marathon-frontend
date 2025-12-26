@@ -6,6 +6,7 @@ import {useEffect, useState} from 'react';
 import NewMealLogModal from '../components/NewMealLogModal.tsx';
 import {globalState} from '../helper/GlobalState.ts';
 import axios from 'axios';
+import Constant from "../helper/Constant.ts";
 
 export default function HomePage() {
     const theme = useTheme();
@@ -19,10 +20,8 @@ export default function HomePage() {
                 if (!loggedInUser) return;
 
                 const idToken = await loggedInUser.getIdToken();
-                const backendUrl = 'https://bnb-marathon-backend-569093928388.asia-east1.run.app';
-
                 const res = await axios.get(
-                    `${backendUrl}/scheduled`,
+                    `${Constant.backendUrl}/scheduled`,
                     {
                         headers: {
                             Authorization: `Bearer ${idToken}`

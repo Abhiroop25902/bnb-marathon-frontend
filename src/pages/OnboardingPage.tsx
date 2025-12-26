@@ -12,7 +12,6 @@ import {
     Step,
     StepLabel,
     Stepper,
-    TextField,
     Typography,
     useTheme
 } from '@mui/material';
@@ -20,9 +19,10 @@ import {globalState} from '../helper/GlobalState.ts';
 import UserSchema from '../schema/UserSchema.ts';
 import {normalizeDateToYMD} from '../helper/helper.ts';
 import axios from 'axios';
+import TextField from "@mui/material/TextField";
+import Constant from "../helper/Constant.ts";
 
 export default function OnboardingPage() {
-    const url = 'https://bnb-marathon-backend-569093928388.asia-east1.run.app';
     const theme = useTheme();
     const navigate = useNavigate();
 
@@ -91,7 +91,10 @@ export default function OnboardingPage() {
                 },
                 preference: {
                     proteinTarget_g: proteinTarget,
-                    sensitivities,
+                    sensitivities: sensitivities.map(s => ({
+                        ingredient: s,
+                        isSensitive: true
+                    })),
                     vegetarian
                 },
                 id: loggedInUser.uid
@@ -106,8 +109,8 @@ export default function OnboardingPage() {
 
             const validData = result.data;
 
-            await axios.patch(
-                `${url}/user`,
+            await axios.post(
+                `${Constant.backendUrl}/user`,
                 validData,
                 {
                     headers: {
@@ -137,22 +140,32 @@ export default function OnboardingPage() {
                             type="date"
                             value={lastPeriods[0]}
                             onChange={(e) => setLastPeriods([e.target.value, lastPeriods[1], lastPeriods[2]])}
-                            InputLabelProps={{shrink: true}}
+                            slotProps={{
+                                inputLabel: {
+                                    shrink: true
+                                }
+                            }}
                         />
                         <TextField
                             label="Second Last Period"
                             type="date"
                             value={lastPeriods[1]}
                             onChange={(e) => setLastPeriods([lastPeriods[0], e.target.value, lastPeriods[2]])}
-                            InputLabelProps={{shrink: true}}
-                        />
+                            slotProps={{
+                                inputLabel: {
+                                    shrink: true
+                                }
+                            }}/>
                         <TextField
                             label="Third Last Period"
                             type="date"
                             value={lastPeriods[2]}
                             onChange={(e) => setLastPeriods([lastPeriods[0], lastPeriods[1], e.target.value])}
-                            InputLabelProps={{shrink: true}}
-                        />
+                            slotProps={{
+                                inputLabel: {
+                                    shrink: true
+                                }
+                            }}/>
                         <TextField
                             label="Average Cycle Length (days)"
                             type="number"
@@ -226,7 +239,7 @@ export default function OnboardingPage() {
                         <Typography>Vegetarian: {vegetarian ? 'Yes' : 'No'}</Typography>
                         <Typography>Protein Target: {proteinTarget}g</Typography>
                         <Typography>
-                            Sensitivities: {inputChip || 'None'}
+                            Sensitivities: {sensitivities.join(', ') || 'None'}
                         </Typography>
                     </Stack>
                 );

@@ -7,6 +7,7 @@ import axios from 'axios';
 import {type RecommendationItem, RecommendationListSchema} from '../schema/RecommendationSchema.ts';
 import {ScheduleItemSchema} from '../schema/ScheduledItemSchema.ts';
 import {z} from 'zod';
+import Constant from "../helper/Constant.ts";
 
 
 interface AIRecommendProps {
@@ -19,7 +20,6 @@ export default function AIRecommend({homeCardsData, setHomeCardsData}: AIRecomme
     const loggedInUser = globalState((s) => s.loggedInUser);
     const [loading, setLoading] = useState(false);
     const [recommendations, setRecommendations] = useState<RecommendationItem[]>([]);
-    const backendUrl = 'https://bnb-marathon-backend-569093928388.asia-east1.run.app';
 
     //-------------------------------------------------------------------
     // LOCK HANDLER: Moves a recommendation → schedule & deletes original
@@ -42,7 +42,7 @@ export default function AIRecommend({homeCardsData, setHomeCardsData}: AIRecomme
             const idToken = await loggedInUser?.getIdToken();
 
             // 1. POST → schedule list
-            await axios.post(`${backendUrl}/scheduled`, parsed, {
+            await axios.post(`${Constant.backendUrl}/scheduled`, parsed, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${idToken}`
@@ -50,7 +50,7 @@ export default function AIRecommend({homeCardsData, setHomeCardsData}: AIRecomme
             });
 
             // 2. DELETE → remove from recommendations
-            await axios.delete(`${backendUrl}/recommendation/${item.id}`, {
+            await axios.delete(`${Constant.backendUrl}/recommendation/${item.id}`, {
                 headers: {
                     Authorization: `Bearer ${idToken}`
                 }
@@ -84,7 +84,7 @@ export default function AIRecommend({homeCardsData, setHomeCardsData}: AIRecomme
             const idToken = await loggedInUser.getIdToken();
 
             const res = await axios.post(
-                `${backendUrl}/ai/recommendations/generate`,
+                `${Constant.backendUrl}/ai/recommendations/generate`,
                 {
                     date: new Date().toISOString().slice(0, 10),
                     count: 3

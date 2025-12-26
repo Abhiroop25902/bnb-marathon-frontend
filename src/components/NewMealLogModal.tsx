@@ -1,14 +1,4 @@
-import {
-    Box,
-    Button,
-    Chip,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    TextField,
-    Typography,
-    useTheme
-} from "@mui/material";
+import {Box, Button, Chip, DialogActions, DialogContent, DialogTitle, Typography, useTheme} from "@mui/material";
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
 import {toCapitalCase} from "../helper/helper.ts";
 import {useState} from "react";
@@ -17,18 +7,14 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {globalState} from "../helper/GlobalState.ts";
 import {storage} from "../helper/firebase.ts";
-import {
-    ref as storageRef,
-    uploadBytesResumable,
-    getDownloadURL
-} from "firebase/storage";
+import {getDownloadURL, ref as storageRef, uploadBytesResumable} from "firebase/storage";
 import axios from "axios";
+import Constant from "../helper/Constant.ts";
+import TextField from "@mui/material/TextField";
 
 type Props = {
     setModalOpen: (open: boolean) => void;
 }
-const url = "https://bnb-marathon-backend-569093928388.asia-east1.run.app";
-
 
 export default function NewMealLogModal({setModalOpen}: Props) {
     const theme = useTheme();
@@ -161,7 +147,7 @@ export default function NewMealLogModal({setModalOpen}: Props) {
                     variant="outlined"
                     onClick={() => setModalOpen(false)}>Cancel</Button>
                 <Button fullWidth variant="contained" onClick={async () => {
-                    await axios.post(`${url}/logs`,
+                    await axios.post(`${Constant.backendUrl}/logs`,
                         {
                             imgUrl: imgUrl,
                             mealType: selectedMealType,

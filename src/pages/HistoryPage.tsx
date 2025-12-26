@@ -9,6 +9,7 @@ import "./HistoryPage.css"
 import HistoryMealCard from "../components/HistoryMealCard.tsx";
 import FeatherIcon from "feather-icons-react";
 import {toCapitalCase} from "../helper/helper.ts";
+import Constant from "../helper/Constant.ts";
 
 export default function HistoryPage() {
     const loggedInUser = globalState(s => s.loggedInUser)
@@ -20,8 +21,6 @@ export default function HistoryPage() {
             navigate("/login");
         }
     }, [persistenceInitialized, loggedInUser, navigate]);
-
-    const url = "https://bnb-marathon-backend-569093928388.asia-east1.run.app";
 
     const [logs, setLogs] = useState<Array<z.infer<typeof LogSchema>> | null>(null);
     const [duration, setDuration] = useState<"lw" | "lm">("lw");
@@ -39,7 +38,7 @@ export default function HistoryPage() {
             const idToken = await loggedInUser!.getIdToken()
 
             try {
-                const res = await axios.get(`${url}/logs`, {
+                const res = await axios.get(`${Constant.backendUrl}/logs`, {
                     headers: {
                         Authorization: `Bearer ${idToken}`,
                     },
