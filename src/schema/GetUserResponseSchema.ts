@@ -24,7 +24,10 @@ const UserSchema = z.object({
 
     preference: z.object({
         proteinTarget_g: z.number(),
-        sensitivities: z.array(z.string()),
+        sensitivities: z.array(z.object({
+            ingredient: z.string(),
+            isSensitive: z.boolean(),
+        })),
         vegetarian: z.boolean()
     }),
 
